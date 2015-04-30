@@ -11,6 +11,7 @@ n = 1000000  # Number of trials
 output = []
 
 for i in range(0, n):
+    print (u-0.5*vol*vol)*t+(vol*sqrt(t)*gauss(0, 1))
     evolution = S*exp((u-0.5*vol*vol)*t+(vol*sqrt(t)*gauss(0, 1)))
     #print evolution
     # Calculate payoffs
