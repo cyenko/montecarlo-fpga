@@ -20,6 +20,8 @@ for i in range(0, n):
     else:
         payoff = max(evolution-Strike, 0)
     # Discount factor
+    #-u*t is realistically between 0 and -1
+    #output of exp(-u*t) is between 0 and 1 given above constraint
     payoff = exp(-u*t)*payoff
     # Append to trial result
     output.append(payoff)
