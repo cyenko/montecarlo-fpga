@@ -1,0 +1,14 @@
+The table will be stored in ROM if it is in array format
+
+input: bit vector
+translate the bit vector into the lut index
+ - simply convert the bit vector to int
+ - verified that this will not be too large of an int (max is 32 bit)
+
+ the array value corresponding to that index will be the e^ value in the fixed point notation
+
+
+ CREATING THE Fixed point look up table
+Table has the format below, with 2^16 values
+
+type EXP_LUT is ARRAY()
