@@ -31,17 +31,16 @@ BEGIN
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
-        bitVector_tb <= "0000000000000000";
+        bitVector_tb <= "0001000000000101"; --2.5, PASS
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
-        bitVector_tb <= "0000000000000001";
+        bitVector_tb <= "0000100000100010"; -- 1.34, PASS
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
-
-    	--stop the START button to let it stop 
     	clk_tb <= not clk_tb;
+        bitVector_tb <= "1000100000000101"; -- -1.5, PASS
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;

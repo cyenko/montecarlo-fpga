@@ -2,6 +2,8 @@ from math import exp
 import os
 #n is length of integer part
 def bitVectorToFixedPoint(bitVector, n):
+    if len(bitVector) != 16:
+        return "ERROR: LENGTH OF " + bitVector + " IS " + str(len(bitVector))
     sign = bitVector[0]  # 1 for negative, 0 for positive
     integer_part = bitVector[1:n+1]
     decimal_part = bitVector[n+1:len(bitVector)]
@@ -13,6 +15,7 @@ def bitVectorToFixedPoint(bitVector, n):
     return total_conv
 
 #n is the length of the integer part
+#IMPORTANT: Round fixedPoint input to three decimals
 def fixedPointToBitVector(fixedPoint, n):
     sign = str(0)
     if fixedPoint < 0:
@@ -26,7 +29,10 @@ def fixedPointToBitVector(fixedPoint, n):
     return sign+integer_binary+decimal_binary
 
 def formatLine(firstVal,secondVal):
-    return str(firstVal) + " => \"" + str(secondVal) + "\","
+    hasComma = ","
+    if firstVal == 65535:
+        hasComma = ""
+    return str(firstVal) + " => \"" + str(secondVal) + "\"" + hasComma
 
 #n - 16, length of input bitVector
 #lengthOfInteger - How many bits to reserve for the integer part
@@ -69,6 +75,8 @@ def createExpLUT(lengthOfInteger, n, outputFileName=None):
             #Check to see if return bit vector is proper size
             if len(return_bitvector) == 16:
                 writer.write(formatLine(i, return_bitvector))
+                if i % 3 == 0: #even
+                    writer.write("\n")
             else:
                 print "ERROR: "
                 print i
@@ -91,8 +99,10 @@ def createExpLUT(lengthOfInteger, n, outputFileName=None):
         writer.close()
         print "Done writing file"
 
-createExpLUT(4, 16, "exp_lut_table")
-#1 00000010 0000001
-
-#Integer of 33025, fixed point value of -2.1
-#print bitVectorToFixedPoint("1000000100000001", 8)
+if __name__ == "__main__":
+    print "CREATING TABLE"
+    createExpLUT(4, 16, "exp_lut_table")
+    #1 00000010 0000001
+    #Integer of 33025, fixed point value of -2.1
+    print bitVectorToFixedPoint("1000000100000001", 8)
+    print fixedPointToBitVector(3.4,4)
