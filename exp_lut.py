@@ -4,7 +4,7 @@
 #Range of input is a decimal, could be negative
 #For fixed point decimals, how does 2s complement work?
 
-#bitVector(32 bits) - 1 for the sign, n bits for the integer part, 32-n-1 bits for the decimal
+#bitVector(16 bits) - 1 for the sign, n bits for the integer part, 16-n-1 bits for the decimal
 
 def exp_lut_binary(bitVector, n):
     sign = bitVector[0] #1 for negative, 0 for positive
@@ -41,8 +41,17 @@ def exp_lut_binary(bitVector, n):
 
     integer_conv = str(int(integer_part, 2))
     print integer_conv
+
+    returnProduct = 1
+    returnProduct = returnProduct * expTable[0] ** int(integer_conv[0])
+
     decimal_conv = str(int(decimal_part, 2))
-    return -1
+    pos = 1
+    for char in decimal_conv:
+        amt = (expTable[pos] ** int(char))
+        returnProduct = returnProduct * amt
+        pos = pos + 1
+    return returnProduct
 #LUT based on the math identity e^(a+b+c)=e^a *e^b * e^c
 def exp_lut(inNum):
     #First we concatenate inNum to the length of our lookup table
@@ -90,4 +99,4 @@ print assertEqual(exp_lut(2.123), 8.356)  # Expected 8.356
 print assertEqual(exp_lut(4.9971), 147.983)  # Expected 147.983
 print assertEqual(exp_lut(-2.123), 0.119672)  # Expected 0.119672
 print assertEqual(exp_lut(-4.9971), .006758)  # Expected .006758
-print exp_lut_binary("11110000111100001111000011110000", 16)
+print exp_lut_binary("1000000100000001", 8)
