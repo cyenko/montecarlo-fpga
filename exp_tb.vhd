@@ -2,20 +2,20 @@ library ieee;
 use ieee.std_logic_1164.all;
 use work.monte_carlo.all;
 
-entity exp is 
+entity exp_tb is 
  port( 
      --Inputs 
      clk : in std_logic; 
      bitVector : in std_logic_vector (15 downto 0); --16 bits
      
      --Outputs 
-     outVector : out std_logic_vector (15 downto 0)
+     outVector_tb : out std_logic_vector (15 downto 0)
  ); 
-end entity exp;
+end entity exp_tb;
 
 ARCHITECTURE structural OF exp_tb IS
     
-	signal bitVector_tb : std_logic_vector(15 downt0 0);
+	signal bitVector_tb : std_logic_vector(15 downto 0);
 	signal clk_tb : std_logic;
 
 
@@ -35,17 +35,16 @@ BEGIN
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
-        bitVector <= "0000000000000000";
+        bitVector_tb <= "0000000000000000";
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
-        bitVector <= "0000000000000001";
+        bitVector_tb <= "0000000000000001";
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
 
     	--stop the START button to let it stop 
-    	start_tb <= '0';
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
@@ -69,5 +68,5 @@ BEGIN
     	clk_tb <= not clk_tb;
         wait;
    END PROCESS;
-  END ARCHITECTURE struct;
+  END ARCHITECTURE structural;
     

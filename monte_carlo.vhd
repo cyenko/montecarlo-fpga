@@ -61,7 +61,17 @@ package monte_carlo is
             segments_out    :out std_logic_vector (6 downto 0)
         );
 	end COMPONENT leddcd;
- 
+
+	 component exp is 
+	 port( 
+		 --Inputs 
+		 clk : in std_logic; 
+		 bitVector : in std_logic_vector (15 downto 0); --16 bits
+		 
+		 --Outputs 
+		 outVector : out std_logic_vector (15 downto 0)
+	 ); 
+	end component exp;
  --Other constants, types, subroutines, components go here 
  
 end package monte_carlo; 
