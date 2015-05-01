@@ -4,10 +4,6 @@ use work.monte_carlo.all;
 
 entity exp_tb is 
  port( 
-     --Inputs 
-     clk : in std_logic; 
-     bitVector : in std_logic_vector (15 downto 0); --16 bits
-     
      --Outputs 
      outVector_tb : out std_logic_vector (15 downto 0)
  ); 

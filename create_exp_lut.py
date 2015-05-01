@@ -10,3 +10,6 @@
 # determining its fixed point 'true' value, and finally taking e^that
 
 def createExpLUT(lengthOfInteger,n):
+	for i in range(0,(2**n)-1):
+		if i==2**n:
+			print i
