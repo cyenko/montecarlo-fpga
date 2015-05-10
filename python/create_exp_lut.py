@@ -1,15 +1,26 @@
 from math import exp
 import os
 #n is length of integer part
+#1.5, 0 000 0001 1000 0000 , 0000000110000000
+#1.75, , 0 000 0001 1100 0000, 0000000111000000
+#2.78125, 0 000 0010 1100 1000, 0 000 0010 1100 1000
 def bitVectorToFixedPoint(bitVector, n):
     if len(bitVector) != 16:
         return "ERROR: LENGTH OF " + bitVector + " IS " + str(len(bitVector))
     sign = bitVector[0]  # 1 for negative, 0 for positive
     integer_part = bitVector[1:n+1]
-    decimal_part = bitVector[n+1:len(bitVector)]
-    integer_conv = str(int(integer_part, 2))
-    decimal_conv = str(int(decimal_part, 2))
-    total_conv = float(integer_conv + "." + decimal_conv)
+    decimal_part_binary = bitVector[n+1:len(bitVector)]
+    integer_conv = int(integer_part, 2)
+    #Calculate the decimal part of the number
+    decimal_part = 0.0
+    exponent = -1
+    for digit in decimal_part_binary:
+        if digit == '1':
+            print "exponent" + str(exponent)
+            decimal_part = decimal_part + (2**exponent)
+        exponent = exponent - 1
+    print "Decimal part is " + str(decimal_part)
+    total_conv = float(integer_conv)+decimal_part
     if float(sign) == 1:
         total_conv = total_conv * -1
     return total_conv
