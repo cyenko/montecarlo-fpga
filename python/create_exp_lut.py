@@ -38,7 +38,7 @@ def fixedPointToBitVector(fixedPoint, n):
         sign = str(1)
         fixedPoint = fixedPoint * -1
     integer_part = str(fixedPoint).split('.')[0]
-    decimal_part = int(str(fixedPoint).split('.')[1])
+    decimal_part = str(fixedPoint).split('.')[1]
     #Convert back to float
     decimal_part = float("." + str(decimal_part))
     integer_binary = ("{0:0"+str(n)+"b}").format(int(integer_part))
@@ -60,7 +60,7 @@ def fixedPointToBitVector(fixedPoint, n):
         raise ValueError("Cannot represent that number," + str(fixedPoint) + " in our notation")
     return sign+integer_binary+decimal_binary+"".join(str(x) for x in [0]*amtZeros)
 
-def formatLine(firstVal,secondVal):
+def formatLine(firstVal, secondVal):
     hasComma = ","
     if firstVal == 65535:
         hasComma = ""
@@ -154,7 +154,6 @@ def createExpLUT(lengthOfInteger, n, outputFileName=None):
             print "FIXED POINT REPRESENTATION: " + return_bitvector
             print "LINE TO WRITE: " + formatLine(i, return_bitvector)
         '''
-        
     print "Number of lines not written : " + str(numberNotWritten)
     if writer is not None:
         writer.write(');')
