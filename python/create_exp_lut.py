@@ -4,6 +4,7 @@ import os
 #1.5, 0 000 0001 1000 0000 , 0000000110000000
 #1.75, , 0 000 0001 1100 0000, 0000000111000000
 #2.78125, 0 000 0010 1100 1000, 0 000 0010 1100 1000
+#0 000 0001 1100 1000
 def bitVectorToFixedPoint(bitVector, n):
     if len(bitVector) != 16:
         return "ERROR: LENGTH OF " + bitVector + " IS " + str(len(bitVector))
@@ -26,18 +27,34 @@ def bitVectorToFixedPoint(bitVector, n):
     return total_conv
 
 #n is the length of the integer part
-#IMPORTANT: Round fixedPoint input to three decimals
+#print fixedPointToBitVector(1.5,7)
+#print fixedPointToBitVector(1.75,7)
+#print fixedPointToBitVector(2.78125,7)
 def fixedPointToBitVector(fixedPoint, n):
     sign = str(0)
+    #conversion of the sign
     if fixedPoint < 0:
         sign = str(1)
         fixedPoint = fixedPoint * -1
-
     integer_part = str(fixedPoint).split('.')[0]
-    decimal_part = str(fixedPoint).split('.')[1]
+    decimal_part = int(str(fixedPoint).split('.')[1])
+    #Convert back to float
+    decimal_part = float("." + str(decimal_part))
     integer_binary = ("{0:0"+str(n)+"b}").format(int(integer_part))
-    decimal_binary = ("{0:0"+str(16-1-n)+"b}").format(int(decimal_part))
-    return sign+integer_binary+decimal_binary
+    #Conversion of the decimal part
+    decimal_binary = ""
+    while decimal_part != 0.0:
+        temp = decimal_part * 2
+        if temp >= 1:
+            decimal_binary = decimal_binary + "1"
+        else:
+            decimal_binary = decimal_binary + "0"
+        #Disregard the integer part, and go again
+        decimal_part = float("." + str(temp).split('.')[1])
+    #Pad the decimal part if necessary
+    amtZeros = 16-len(integer_binary)-len(decimal_binary)-1
+    return sign+integer_binary+decimal_binary+"".join(str(x) for x in [0]*amtZeros)
+
 
 def formatLine(firstVal,secondVal):
     hasComma = ","
