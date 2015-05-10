@@ -31,16 +31,19 @@ BEGIN
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
-        bitVector_tb <= "0001000000000101"; --2.5, PASS
+        --x=4.01953125, e^x=55.675
+        bitVector_tb <= "0000010000000101";
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
-        bitVector_tb <= "0000100000100010"; -- 1.34, PASS
+        --x=1.75,e^x=5.754602676
+        bitVector_tb <= "0000000111000000";
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
-        bitVector_tb <= "1000100000000101"; -- -1.5, PASS
+        --x=2.78125,e^x=16.13918232
+        bitVector_tb <= "0000001011001000";
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
