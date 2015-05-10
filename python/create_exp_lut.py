@@ -1,5 +1,6 @@
 from math import exp
 import os
+from decimal import Decimal
 #n is length of integer part
 #1.5, 0 000 0001 1000 0000 , 0000000110000000
 #1.75, , 0 000 0001 1100 0000, 0000000111000000
@@ -17,10 +18,10 @@ def bitVectorToFixedPoint(bitVector, n):
     exponent = -1
     for digit in decimal_part_binary:
         if digit == '1':
-            print "exponent" + str(exponent)
+            #print "exponent" + str(exponent)
             decimal_part = decimal_part + (2**exponent)
         exponent = exponent - 1
-    print "Decimal part is " + str(decimal_part)
+    #print "Decimal part is " + str(decimal_part)
     total_conv = float(integer_conv)+decimal_part
     if float(sign) == 1:
         total_conv = total_conv * -1
@@ -45,22 +46,32 @@ def fixedPointToBitVector(fixedPoint, n):
     decimal_binary = ""
     while decimal_part != 0.0:
         temp = decimal_part * 2
+        #print temp
         if temp >= 1:
             decimal_binary = decimal_binary + "1"
         else:
             decimal_binary = decimal_binary + "0"
+        #print decimal_binary
         #Disregard the integer part, and go again
         decimal_part = float("." + str(temp).split('.')[1])
     #Pad the decimal part if necessary
     amtZeros = 16-len(integer_binary)-len(decimal_binary)-1
+    if amtZeros < 0:
+        raise ValueError("Cannot represent that number," + str(fixedPoint) + " in our notation")
     return sign+integer_binary+decimal_binary+"".join(str(x) for x in [0]*amtZeros)
-
 
 def formatLine(firstVal,secondVal):
     hasComma = ","
     if firstVal == 65535:
         hasComma = ""
     return str(firstVal) + " => \"" + str(secondVal) + "\"" + hasComma
+
+#Given the length of the integer part, what is the smallest number we can represent?
+#Return the number of decimal points we shoudl round to in order to make sure
+#We do not overflow the final return bitVector
+def getGranularity(n):
+    #For now, we are satisfied with a granularity of 5 decimal points
+    return 2**(-1*(16-n-1))
 
 #n - 16, length of input bitVector
 #lengthOfInteger - How many bits to reserve for the integer part
@@ -85,25 +96,47 @@ def createExpLUT(lengthOfInteger, n, outputFileName=None):
         print "Writing to file " + outputFileName
         writer = open(outputFileName, 'w')
         writer.write('constant exp_lut : rom := (')
-
+    #Determine granularity
+    granularity = getGranularity(7)
     for i in range(0, (2**n)):
-        #print i
+        #print "ON INT " +str(i)
         binaryString = "{0:016b}".format(i)
         #print binaryString
         fixedPoint = bitVectorToFixedPoint(binaryString, lengthOfInteger)
-        expValue = round(exp(fixedPoint), 3)
+        '''
+        if i == 33025:
+            print "x" + str(fixedPoint)
+        '''
+        expValue = exp(fixedPoint)
+        #print expValue
+        #Round expValue to the nearest granularity point
+
         #The problem experienced here is that e^ generates values larger than
         #What can fit in our input schema
         if round(expValue, 0) >= 2**lengthOfInteger:
+            #print "NOT WRITTEN"
             numberNotWritten = numberNotWritten + 1
             return_bitvector = "0000000000000000"
         else:
+           #Do we need to round this value to a multiple of the granularity
+            '''
+            if i==33025:
+                print "BEFORE " +str(expValue)
+            '''
+            subtractVal = float(Decimal(expValue) % Decimal(granularity))
+            expValue = expValue - subtractVal
+            '''
+            if i==33025:
+                print "GRAN " + str(granularity)
+                print "SUBVAL " + str(subtractVal)
+                print "AFTER " +str(expValue)
+            '''
             return_bitvector = fixedPointToBitVector(expValue, lengthOfInteger)
         if writer is not None:
             #Check to see if return bit vector is proper size
             if len(return_bitvector) == 16:
                 writer.write(formatLine(i, return_bitvector))
-                if i % 3 == 0: #even
+                if i % 3 == 0:  #even
                     writer.write("\n")
             else:
                 print "ERROR: "
@@ -121,6 +154,7 @@ def createExpLUT(lengthOfInteger, n, outputFileName=None):
             print "FIXED POINT REPRESENTATION: " + return_bitvector
             print "LINE TO WRITE: " + formatLine(i, return_bitvector)
         '''
+        
     print "Number of lines not written : " + str(numberNotWritten)
     if writer is not None:
         writer.write(');')
@@ -129,8 +163,7 @@ def createExpLUT(lengthOfInteger, n, outputFileName=None):
 
 if __name__ == "__main__":
     print "CREATING TABLE"
-    createExpLUT(4, 16, "exp_lut_table")
+    createExpLUT(7, 16, "exp_lut_table")
+    print "DONE"
     #1 00000010 0000001
     #Integer of 33025, fixed point value of -2.1
-    print bitVectorToFixedPoint("1000000100000001", 8)
-    print fixedPointToBitVector(3.4,4)
