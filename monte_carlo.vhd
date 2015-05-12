@@ -6,7 +6,7 @@ use IEEE.std_logic_1164.all;
  
 package monte_carlo is 
  
-	constant STOCK_W: natural := 32;
+	constant STOCK_W: natural := 16;
 
 	COMPONENT project392 is 
 		GENERIC ( STOCK_WIDTH : natural := STOCK_W);
@@ -50,6 +50,7 @@ package monte_carlo is
  	STOCK_WIDTH : natural := STOCK_W
  );
 		port(
+			clk : in std_logic;
 			data_in : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			data_out : out std_logic_vector(STOCK_WIDTH-1 downto 0)
 		);
@@ -62,7 +63,7 @@ package monte_carlo is
         );
 	end COMPONENT leddcd;
 
-	 component exp is 
+	component exp is 
 	 port( 
 		 --Inputs 
 		 clk : in std_logic; 
@@ -72,6 +73,9 @@ package monte_carlo is
 		 outVector : out std_logic_vector (15 downto 0)
 	 ); 
 	end component exp;
+
+
+
  --Other constants, types, subroutines, components go here 
  
 end package monte_carlo; 

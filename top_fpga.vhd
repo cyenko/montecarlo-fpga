@@ -36,15 +36,17 @@ SIGNAL strike : std_logic_vector(STOCK_WIDTH -1 downto 0);
 SIGNAL n : std_logic_vector(STOCK_WIDTH*8-1 downto 0);
 SIGNAL ready_out : std_logic;
 SIGNAL final_price : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
+SIGNAL sum_total_vector : std_logic_vector(STOCK_WIDTH + 10 - 1 DOWNTO 0);
+SIGNAL shift_final_price: std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 
 begin
 
 	--get the stock price in a wire
-	stock <= x"00001234";
+	stock <= x"0180";
 
 	--perform operation with the same stock but out to many variables
 	loop_k : for i in 0 to 7 GENERATE 
-		fn_map : random_fn PORT MAP (stock,n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)));
+		fn_map : random_fn PORT MAP (clk,stock,n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)));
 	end GENERATE;
 
 	--did it in parallel. now we need to have an adder of all stuff
@@ -55,7 +57,7 @@ begin
 		variable temp_sum : integer := 0;
 		variable k: integer := 8;
 		variable started : std_logic:= '0';
-		variable Num : integer := 8192*8192*8;
+		variable Num : integer := 256;
 		variable Price : integer :=0;
 		BEGIN  
 			
@@ -70,10 +72,9 @@ begin
 					started := started;
 					Price := Price;
 					temp_sum := temp_sum;
-					readyn := readyn;
+					readyn := ready_next;
 					sum_total := sum_total;
 				end if;
-				readyn := ready_next;
 				if started='1' then 
 					temp_sum := 0;
 					for i in 0 to k-1 loop 
@@ -91,7 +92,7 @@ begin
 						--and stop this process
 						started := '0';
 					else 
-						Price := 8191;
+						Price := 00;
 						ready_out <= '0';
 						ready_next := readyn;
 					end if;
@@ -102,6 +103,7 @@ begin
 					readyn := readyn;
 				end if;
 			end if;
+		sum_total_vector <= std_logic_vector(to_signed(sum_total,STOCK_WIDTH+10));
 		final_price  <= std_logic_vector(to_signed(Price,STOCK_WIDTH));
 	end process adding_process;
 
@@ -109,7 +111,10 @@ begin
 	--now i need to say 'finish' and signal 'next'
 	--next signal is 'ready' and finished is also 'ready'
 
-	premium <= final_price;
+	--shift the final price by the amount that we need (if it's now a 43 bit vector we shift it by log2(256) )
+	shift_final_price <= sum_total_vector(STOCK_WIDTH+8-1 DOWNTO 8);
+	premium <= shift_final_price;
+	--premium <= final_price;
 	stock_out <= stock;
 	ready <= ready_out;
 
