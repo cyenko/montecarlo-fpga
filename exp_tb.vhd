@@ -16,7 +16,7 @@ ARCHITECTURE structural OF exp_tb IS
 
 
 BEGIN
-    exp_map : exp 
+    exp_map : exp_fn
     port map (
 		clk=>clk_tb,
 		bitVector=>bitVector_tb,

@@ -46,7 +46,7 @@ begin
 
 	--perform operation with the same stock but out to many variables
 	loop_k : for i in 0 to 7 GENERATE 
-		fn_map : random_fn PORT MAP (clk,stock,n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)));
+		fn_map : random_fn PORT MAP (clk=>clk,data_in=>stock,data_out=>n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)));
 	end GENERATE;
 
 	--did it in parallel. now we need to have an adder of all stuff

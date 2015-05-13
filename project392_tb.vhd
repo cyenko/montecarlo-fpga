@@ -35,8 +35,8 @@ BEGIN
 
     test_proc : PROCESS
     BEGIN
-    	stock_price_tb <= x"00001234";
-    	strike_price_tb <= x"00001234";
+    	stock_price_tb <= x"0180";
+    	strike_price_tb <= x"0180";
     	t_tb <= x"2";
     	start_tb <= '1';
     	wait for 5 ns;
@@ -51,7 +51,7 @@ BEGIN
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
     	--stop the START button to let it stop 
-    	start_tb <= '0';
+    	--start_tb <= '0';
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
@@ -947,6 +947,7 @@ BEGIN
     	wait for 5 ns;
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
+        start_tb <= '0';
     	clk_tb <= not clk_tb;
     	wait for 5 ns;
     	clk_tb <= not clk_tb;

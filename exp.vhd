@@ -10,7 +10,7 @@ use IEEE.numeric_std.all;
 --output: premium, stock price out, ready
 --	for now, do only premium and ready
 
-entity exp is 
+entity exp_fn is 
  port( 
 	 --Inputs 
 	 clk : in std_logic; 
@@ -19,9 +19,9 @@ entity exp is
 	 --Outputs 
 	 outVector : out std_logic_vector (15 downto 0)
  ); 
-end entity exp;
+end entity exp_fn;
 
-architecture behavioral of exp is 
+architecture behavioral of exp_fn is 
 --Declare the ROM type
 --Real length will be 0 to 2**16-1
 type rom is array (0 to (2**16)-1) of std_logic_vector(15 downto 0);

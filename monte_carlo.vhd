@@ -63,7 +63,7 @@ package monte_carlo is
         );
 	end COMPONENT leddcd;
 
-	component exp is 
+	component exp_fn is 
 	 port( 
 		 --Inputs 
 		 clk : in std_logic; 
@@ -72,7 +72,7 @@ package monte_carlo is
 		 --Outputs 
 		 outVector : out std_logic_vector (15 downto 0)
 	 ); 
-	end component exp;
+	end component exp_fn;
 
 
 

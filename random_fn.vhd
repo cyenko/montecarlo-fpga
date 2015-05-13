@@ -17,7 +17,7 @@ END ENTITY random_fn;
 
 ARCHITECTURE behavioral OF random_fn IS
 BEGIN
-	data_map: exp PORT MAP (clk,data_in,data_out);
+	data_map: exp_fn PORT MAP (clk=>clk,bitVector => data_in, outVector=>data_out);
 
 end architecture behavioral;
 
