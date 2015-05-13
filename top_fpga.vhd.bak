@@ -42,7 +42,7 @@ SIGNAL shift_final_price: std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 begin
 
 	--get the stock price in a wire
-	stock <= stock_price;
+	stock <= x"0180";
 
 	--perform operation with the same stock but out to many variables
 	loop_k : for i in 0 to 7 GENERATE 

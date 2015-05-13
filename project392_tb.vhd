@@ -35,7 +35,7 @@ BEGIN
 
     test_proc : PROCESS
     BEGIN
-    	stock_price_tb <= x"0180";
+    	stock_price_tb <= x"0100";
     	strike_price_tb <= x"0180";
     	t_tb <= x"2";
     	start_tb <= '1';
