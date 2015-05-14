@@ -25,7 +25,8 @@ entity project392 is
 			 --premium_led is the width that will map entirely to the LEDs 
 			 premium_led : out std_logic_vector (7*(STOCK_WIDTH/4) -1 downto 0);
 			 --stock_out_led : out std_logic_vector (STOCK_WIDTH*2 - 1 downto 0)
-			 ready : out std_logic
+			 ready : out std_logic;
+			 progress_led : out std_logic_vector(9 downto 0)
 	); 
 end entity project392; 
  
@@ -41,7 +42,7 @@ architecture structural of project392 is
 
 	not_start <= not start;
  		--Structural design goes here 
-	T1: top_fpga PORT MAP(clk=>clk,start=>not_start,stock_price=>stock_price,strike_price=>strike_price,t=>t,premium=>premium,ready=>ready);
+	T1: top_fpga PORT MAP(clk=>clk,start=>not_start,stock_price=>stock_price,strike_price=>strike_price,t=>t,premium=>premium,ready=>ready,progress_led=>progress_led);
 
 	loop_led_premium: for i in 0 to ((STOCK_WIDTH/4)-1) GENERATE 
 		begin

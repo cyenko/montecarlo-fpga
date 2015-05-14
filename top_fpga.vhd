@@ -12,7 +12,10 @@ use IEEE.numeric_std.all;
 
 entity top_fpga is 
  GENERIC (
- 	STOCK_WIDTH : natural := STOCK_W
+ 	STOCK_WIDTH : natural := STOCK_W;
+	NUM_ITERATIONS : natural := N_NUMBER;
+	NUM_PARALLEL : natural := N_PAR;
+	log_iterations : integer := log2_N_NUMBER
  );
  port( 
 	 --Inputs 
@@ -25,7 +28,8 @@ entity top_fpga is
 	 --Outputs 
 	 premium : out std_logic_vector (STOCK_WIDTH -1 downto 0);  --32 bits long
 	 stock_out : out std_logic_vector (STOCK_WIDTH - 1 downto 0); --32 bits long
-	 ready : out std_logic
+	 ready : out std_logic;
+	 progress_led : out std_logic_vector(9 downto 0) --to display the progress of the operation
  ); 
 end entity top_fpga;
 
@@ -33,10 +37,10 @@ architecture behavioral of top_fpga is
 
 SIGNAL stock : std_logic_vector(STOCK_WIDTH - 1 downto 0);
 SIGNAL strike : std_logic_vector(STOCK_WIDTH -1 downto 0);
-SIGNAL n : std_logic_vector(STOCK_WIDTH*8-1 downto 0);
+SIGNAL n : std_logic_vector(STOCK_WIDTH*NUM_PARALLEL-1 downto 0);
 SIGNAL ready_out : std_logic;
 SIGNAL final_price : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
-SIGNAL sum_total_vector : std_logic_vector(STOCK_WIDTH + 10 - 1 DOWNTO 0);
+SIGNAL sum_total_vector : std_logic_vector(STOCK_WIDTH*3 - 1 DOWNTO 0);
 SIGNAL shift_final_price: std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 
 begin
@@ -45,7 +49,7 @@ begin
 	stock <= stock_price;
 
 	--perform operation with the same stock but out to many variables
-	loop_k : for i in 0 to 7 GENERATE 
+	loop_k : for i in 0 to (NUM_PARALLEL-1) GENERATE 
 		fn_map : random_fn PORT MAP (clk=>clk,data_in=>stock,data_out=>n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)));
 	end GENERATE;
 
@@ -55,14 +59,16 @@ begin
 		variable sum_total : integer := 0;
 		variable readyn,ready_next : integer := 0;
 		variable temp_sum : integer := 0;
-		variable k: integer := 8;
+		variable k: integer := NUM_PARALLEL;
 		variable started : std_logic:= '0';
-		variable Num : integer := 256;
+		variable Num : integer := NUM_ITERATIONS;
 		variable Price : integer :=0;
+		variable Progress: integer := 0;
 		BEGIN  
 			
 			if rising_edge(clk) then
 				if (start='1') then 
+					Progress:= 0;
 					started := '1';
 					temp_sum := 0;
 					readyn := 0;
@@ -74,6 +80,8 @@ begin
 					temp_sum := temp_sum;
 					readyn := ready_next;
 					sum_total := sum_total;
+					Progress := Progress /(1024);
+					
 				end if;
 				if started='1' then 
 					temp_sum := 0;
@@ -103,8 +111,9 @@ begin
 					readyn := readyn;
 				end if;
 			end if;
-		sum_total_vector <= std_logic_vector(to_signed(sum_total,STOCK_WIDTH+10));
+		sum_total_vector <= std_logic_vector(to_signed(sum_total,STOCK_WIDTH*3));
 		final_price  <= std_logic_vector(to_signed(Price,STOCK_WIDTH));
+		progress_led <= std_logic_vector(to_signed(Progress,10));
 	end process adding_process;
 
 	--ok. solution is done
@@ -112,7 +121,7 @@ begin
 	--next signal is 'ready' and finished is also 'ready'
 
 	--shift the final price by the amount that we need (if it's now a 43 bit vector we shift it by log2(256) )
-	shift_final_price <= sum_total_vector(STOCK_WIDTH+8-1 DOWNTO 8);
+	shift_final_price <= sum_total_vector(STOCK_WIDTH+log_iterations-1 DOWNTO log_iterations);
 	premium <= shift_final_price;
 	--premium <= final_price;
 	stock_out <= stock;
