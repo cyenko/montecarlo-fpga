@@ -20,6 +20,8 @@ package monte_carlo is
 				 stock_price : in std_logic_vector (STOCK_WIDTH -1 downto 0);  -- from 0 to 63
 				 strike_price :  in std_logic_vector (STOCK_WIDTH -1 downto 0);  --from 0 to 63
 				 t : in std_logic_vector(3 downto 0); --from 0 to 15 days
+	 			 u : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0); -- rate-free interest rate'
+	 			 vol : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 				 
 				 --Outputs 
 				 --premium_led is the width that will map entirely to the LEDs 
@@ -46,6 +48,8 @@ package monte_carlo is
 			 stock_price : in std_logic_vector (STOCK_WIDTH -1 downto 0);  -- from 0 to 63
 			 strike_price :  in std_logic_vector (STOCK_WIDTH -1 downto 0);  --from 0 to 63
 			 t : in std_logic_vector(3 downto 0); --from 0 to 15 days
+			 u : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0); -- rate-free interest rate
+
 			 
 			 --Outputs 
 			 premium : out std_logic_vector (STOCK_WIDTH -1 downto 0); 
@@ -55,6 +59,25 @@ package monte_carlo is
 
 		 ); 
 	end component top_fpga;
+
+	component constant_generator is
+		GENERIC (
+ 			STOCK_WIDTH : natural := STOCK_W
+ 		);
+		port(
+			clk: in std_logic;
+			stock : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
+			vol : in std_logic_vector(STOCK_WIDTH-1 downto 0);
+			t : in std_logic_vector(3 downto 0);
+			u : in std_logic_vector(STOCK_WIDTH-1 downto 0);
+
+			--output
+			A : out std_logic_vector (STOCK_WIDTH-1 downto 0);
+			B : out std_logic_vector (STOCK_WIDTH-1 downto 0);
+			C : out std_logic_vector (STOCK_WIDTH-1 downto 0);
+			constantReady : out std_logic
+		);
+	END component constant_generator;
 
 	component random_fn is
 	GENERIC (

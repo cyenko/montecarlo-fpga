@@ -23,7 +23,9 @@ entity top_fpga is
 	 start : in std_logic; 
 	 stock_price : in std_logic_vector (STOCK_WIDTH -1 downto 0);  -- from 0 to 63 or 31
 	 strike_price :  in std_logic_vector (STOCK_WIDTH -1 downto 0);  --from 0 to 63 or 31
-	 t : in std_logic_vector(3 downto 0); --from 0 to 15 days
+	 t : in std_logic_vector(3 downto 0); --from 0 to 15 days;
+	 u : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0); -- rate-free interest rate
+	 vol : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 	 
 	 --Outputs 
 	 premium : out std_logic_vector (STOCK_WIDTH -1 downto 0);  --32 bits long
@@ -42,11 +44,25 @@ SIGNAL ready_out : std_logic;
 SIGNAL final_price : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 SIGNAL sum_total_vector : std_logic_vector(STOCK_WIDTH*3 - 1 DOWNTO 0);
 SIGNAL shift_final_price: std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
+SIGNAL A,B,C : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 
 begin
 
 	--get the stock price in a wire
 	stock <= stock_price;
+
+	--wire in constants
+	constants_map : constant_generator PORT MAP (
+		clk=>clk, 
+		stock=>stock,
+		vol => vol,
+		t => t,
+		u => u,
+		A => A,
+		B => B,
+		C => C
+		);
+
 
 	--perform operation with the same stock but out to many variables
 	loop_k : for i in 0 to (NUM_PARALLEL-1) GENERATE 
