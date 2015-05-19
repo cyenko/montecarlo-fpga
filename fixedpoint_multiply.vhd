@@ -8,6 +8,7 @@ GENERIC (
  	STOCK_WIDTH : natural := STOCK_W
  );
 	port(
+		clk : in std_logic;
 		data_in1 : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 		data_in2 : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 		data_out : out std_logic_vector(STOCK_WIDTH-1 downto 0)
