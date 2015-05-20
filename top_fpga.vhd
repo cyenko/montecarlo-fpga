@@ -15,7 +15,9 @@ entity top_fpga is
  	STOCK_WIDTH : natural := STOCK_W;
 	NUM_ITERATIONS : natural := N_NUMBER;
 	NUM_PARALLEL : natural := N_PAR;
-	log_iterations : integer := log2_N_NUMBER
+	log_iterations : integer := log2_N_NUMBER;
+	T_WIDTH : natural := TIME_W
+
  );
  port( 
 	 --Inputs 
@@ -23,7 +25,7 @@ entity top_fpga is
 	 start : in std_logic; 
 	 stock_price : in std_logic_vector (STOCK_WIDTH -1 downto 0);  -- from 0 to 63 or 31
 	 strike_price :  in std_logic_vector (STOCK_WIDTH -1 downto 0);  --from 0 to 63 or 31
-	 t : in std_logic_vector(3 downto 0); --from 0 to 15 days;
+	 t : in std_logic_vector(T_WIDTH-1 downto 0); --from 0 to 15 days;
 	 u : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0); -- rate-free interest rate
 	 vol : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 	 
