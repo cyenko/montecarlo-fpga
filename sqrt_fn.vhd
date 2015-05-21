@@ -14,7 +14,7 @@ entity sqrt_fn is
  port( 
 	 --Inputs (is unsigned)
 	 clk : in std_logic; 
-	 bitVector : in std_logic_vector (7 downto 0); --16 bits
+	 bitVector : in std_logic_vector (7 downto 0); --8 bits
 	 
 	 --Outputs (is fixed point)
 	 outVector : out std_logic_vector (15 downto 0)

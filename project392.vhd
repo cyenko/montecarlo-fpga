@@ -12,14 +12,16 @@ use WORK.monte_carlo.all;
 --and from out there to the LED. nothing else
  
 entity project392 is 
-	GENERIC ( STOCK_WIDTH : natural := STOCK_W);
- 	port( 
+	GENERIC ( STOCK_WIDTH : natural := STOCK_W;
+			T_WIDTH : natural := TIME_W
+	);
+ 	PORT( 
 		--Inputs 
 			 clk : in std_logic; 
 			 start : in std_logic; 
 			 stock_price : in std_logic_vector (STOCK_WIDTH -1 downto 0);  -- from 0 to 63
 			 strike_price :  in std_logic_vector (STOCK_WIDTH -1 downto 0);  --from 0 to 63
-			 t : in std_logic_vector(3 downto 0); --from 0 to 15 days'
+			 t : in std_logic_vector(T_WIDTH-1 downto 0); --from 0 to 15 days'
 			 vol : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 			 
 			 --Outputs 
@@ -41,8 +43,11 @@ architecture structural of project392 is
 	
 	BEGIN 
 
+	--used in synthesis. comment this line out for simulation
 	not_start <= not start;
- 		--Structural design goes here 
+
+ 		--Structural design goes here for the pricer
+
 	T1: top_fpga PORT MAP(
 		clk=>clk,
 		start=>not_start,
@@ -55,25 +60,12 @@ architecture structural of project392 is
 		progress_led=>progress_led
 	);
 
+	--mapping results to the LEDs
 	loop_led_premium: for i in 0 to ((STOCK_WIDTH/4)-1) GENERATE 
 		begin
 			led_map : leddcd PORT MAP (premium((i+1)*4-1 downto (i)*4),premium_led((i+1)*7-1 downto (i)*7));
 	end GENERATE;
 
 
-	--overflow <=s_overflow;
-	
-	--if (sign='1') then
-	--	segments_out(26 downto 21) <="111111";
-	--	segments_out(27) <= '0';
-		--for i IN 21 to 27 GENERATE begin
-		--	condition_off: if (i=6) GENERATE 
-		--		segments_out(i) <= '1';
-		--	end GENERATE;	
-		--	segments_out(i) <= '0';
-		--END GENERATE;
-	--ELSE
-	--segments_out(27 downto 21) <= "1111111";
-	--END IF;
 end architecture structural; 
 ----------------------------------------------------------------------------- 

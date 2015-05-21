@@ -4,7 +4,7 @@ use IEEE.numeric_std.all;
 use work.monte_carlo.all;
 
 
-entity random_fn is
+entity pricer is
 GENERIC (
  	STOCK_WIDTH : natural := STOCK_W
  );

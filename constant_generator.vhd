@@ -4,12 +4,12 @@ use IEEE.numeric_std.all;
 use work.monte_carlo.all;
 
 
-entity constant_generator is
-GENERIC (
- 	STOCK_WIDTH : natural := STOCK_W;
- 	T_WIDTH : natural := TIME_W
- );
-	port(
+ENTITY constant_generator is
+	GENERIC (
+		STOCK_WIDTH : natural := STOCK_W;
+		T_WIDTH : natural := TIME_W
+	);
+	PORT (
 		clk: in std_logic;
 		stock : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 		vol : in std_logic_vector(STOCK_WIDTH-1 downto 0);
@@ -20,7 +20,9 @@ GENERIC (
 		A : out std_logic_vector (STOCK_WIDTH-1 downto 0);
 		B : out std_logic_vector (STOCK_WIDTH-1 downto 0);
 		C : out std_logic_vector (STOCK_WIDTH-1 downto 0);
-		constantReady : out std_logic
+		constantReady : out std_logic;
+
+		reset : in std_logic
 	);
 END ENTITY constant_generator;
 
@@ -114,6 +116,9 @@ BEGIN
 	end process minus_ut_map;
 
 	C_map : exp_fn PORT MAP (clk,minus_ut,C);
+
+	--for now, just set is as 1?? not really sure what to do here
+	constantReady <= '1';
 
 end architecture behavioral;
 

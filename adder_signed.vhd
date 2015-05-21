@@ -9,7 +9,7 @@ entity adder_signed is
            r : out  STD_LOGIC_VECTOR (11 downto 0));      
 end adder_signed;
 
-architecture Behavioral of adder_signed is
+architecture behavioral of adder_signed is
 
 signal r_next : std_logic_vector(11 downto 0) := (others => '0');
 
@@ -26,4 +26,4 @@ end if;
 
 end process;
 
-end Behavioral;
+end behavioral;

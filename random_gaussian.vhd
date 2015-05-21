@@ -3,9 +3,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity random_gaussian is
-    Port ( clk : in  STD_LOGIC;
-           reset : in  STD_LOGIC;
-           random : out  STD_LOGIC_VECTOR (11 downto 0));
+    Port ( 
+      clk : in  STD_LOGIC;
+      reset : in  STD_LOGIC;
+      random : out  STD_LOGIC_VECTOR (11 downto 0);
+      ready : out std_logic
+    );
 end random_gaussian;
 
 
@@ -116,16 +119,19 @@ case state is
         adder_b <=  uniform2(9)&uniform2(9)&uniform2(9)&uniform2(8 downto 0);
 
         next_state <= s1;
+        ready <= '0';
 
     when s1 =>
         adder_a <= adder_r;
         adder_b <= uniform3(9)&uniform3(9)&uniform3(9)&uniform3(8 downto 0);
 
         next_state <= s2;
+        ready <= '0';
 
     when s2 =>
         adder_a <= adder_r;
         adder_b <= uniform4(9)&uniform4(9)&uniform4(9)&uniform4(8 downto 0);
+        ready <= '1';
 
         next_state <= s0;
 

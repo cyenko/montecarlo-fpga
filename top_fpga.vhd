@@ -33,8 +33,11 @@ entity top_fpga is
 	 premium : out std_logic_vector (STOCK_WIDTH -1 downto 0);  --32 bits long
 	 stock_out : out std_logic_vector (STOCK_WIDTH - 1 downto 0); --32 bits long
 	 ready : out std_logic;
-	 progress_led : out std_logic_vector(9 downto 0) --to display the progress of the operation
- ); 
+	 progress_led : out std_logic_vector(9 downto 0), --to display the progress of the operation
+
+	 reset : in std_logic
+
+); 
 end entity top_fpga;
 
 architecture behavioral of top_fpga is 
@@ -42,14 +45,25 @@ architecture behavioral of top_fpga is
 SIGNAL stock : std_logic_vector(STOCK_WIDTH - 1 downto 0);
 SIGNAL strike : std_logic_vector(STOCK_WIDTH -1 downto 0);
 SIGNAL n : std_logic_vector(STOCK_WIDTH*NUM_PARALLEL-1 downto 0);
-SIGNAL ready_out : std_logic;
+
 SIGNAL final_price : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 SIGNAL sum_total_vector : std_logic_vector(STOCK_WIDTH*3 - 1 DOWNTO 0);
 SIGNAL shift_final_price: std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 SIGNAL A,B,C : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 
+SIGNAL pricers_ready : std_logic_vector(NUM_PARALLEL-1 downto 0);
+SIGNAL lots_of_ones : std_logic_vector(NUM_PARALLEL-1 downto 0);
+
+SIGNAL constants_ready : std_logic;
+SIGNAL ready_out : std_logic;
+SIGNAL pricer_ready : std_logic;
+
+
+
+
 begin
 
+	lots_of_ones <= (others=>'1');
 	--get the stock price in a wire
 	stock <= stock_price;
 
@@ -62,14 +76,33 @@ begin
 		u => u,
 		A => A,
 		B => B,
-		C => C
+		C => C,
+		constants_ready => constants_ready
 		);
 
 
 	--perform operation with the same stock but out to many variables
 	loop_k : for i in 0 to (NUM_PARALLEL-1) GENERATE 
-		fn_map : random_fn PORT MAP (clk=>clk,data_in=>stock,data_out=>n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)));
+		pricer_map : pricer PORT MAP (
+			clk=>clk,
+			Strike => strike,
+			A => A,
+			B => B,
+			C => C,
+			constants_ready => constants_ready,
+			data_out => n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)),
+			pricer_ready => pricers_ready(i)
+		);
 	end GENERATE;
+
+	--make sure that it's all 1111111
+	pricer_ready <= '1' WHEN pricers_ready=lots_of_ones else '0';
+
+
+
+	--now the problem with adding:
+		--only add if the pricers are ready!
+
 
 	--did it in parallel. now we need to have an adder of all stuff
 	--ADD IN PARALLEL
@@ -83,50 +116,66 @@ begin
 		variable Price : integer :=0;
 		variable Progress: integer := 0;
 		BEGIN  
-			
-			if rising_edge(clk) then
-				if (start='1') then 
-					Progress:= 0;
-					started := '1';
-					temp_sum := 0;
-					readyn := 0;
-					sum_total := 0;
-					Price := 0;
-				else
-					started := started;
-					Price := Price;
-					temp_sum := temp_sum;
-					readyn := ready_next;
-					sum_total := sum_total;
-					Progress := Progress /(1024);
-					
-				end if;
-				if started='1' then 
-					temp_sum := 0;
-					for i in 0 to k-1 loop 
-						--add it all up in a temporary variable
-						temp_sum := temp_sum + to_integer(signed(n(STOCK_WIDTH*(i+1)-1 DOWNTO STOCK_WIDTH*(i))));
-					end loop;
-					--and put it out as the total integer
-					sum_total := sum_total + (temp_sum); 
-					readyn := readyn + k;
-					if readyn=Num then
-						ready_out <= '1';
-						ready_next := 0;
-						started := '0';
-						Price := sum_total / Num;
-						--and stop this process
-						started := '0';
-					else 
-						Price := 00;
-						ready_out <= '0';
-						ready_next := readyn;
+			if reset='1' then
+				Progress:= 0;
+				started := '1';
+				temp_sum := 0;
+				readyn := 0;
+				sum_total := 0;
+				Price := 0;
+			else
+				if rising_edge(clk) then
+					if (start='1') then 
+						Progress:= 0;
+						started := '1';
+						temp_sum := 0;
+						readyn := 0;
+						sum_total := 0;
+						Price := 0;
+					else
+						started := started;
+						Price := Price;
+						temp_sum := temp_sum;
+						readyn := ready_next;
+						sum_total := sum_total;
+						Progress := Progress /(1024);
+						
 					end if;
-				else 
-					temp_sum := temp_sum;
-					sum_total := sum_total;
-					ready_next := ready_next;
-					readyn := readyn;
+					if started='1' then 
+						--only do stuff if the pricers are ready
+						if pricer_ready='1' then 
+							temp_sum := 0;
+							for i in 0 to k-1 loop 
+								--add it all up in a temporary variable
+								temp_sum := temp_sum + to_integer(signed(n(STOCK_WIDTH*(i+1)-1 DOWNTO STOCK_WIDTH*(i))));
+							end loop;
+							--and put it out as the total integer
+							sum_total := sum_total + (temp_sum); 
+							readyn := readyn + k;
+							if readyn=Num then
+								ready_out <= '1';
+								ready_next := 0;
+								started := '0';
+								Price := sum_total / Num;
+								--and stop this process
+								started := '0';
+							else 
+								Price := 00;
+								ready_out <= '0';
+								ready_next := readyn;
+							end if;
+						else 
+							temp_sum := temp_sum;
+							sum_total := sum_total;
+							ready_next := ready_next;
+							readyn := readyn;
+						end if;
+					else 
+						temp_sum := temp_sum;
+						sum_total := sum_total;
+						ready_next := ready_next;
+						readyn := readyn;
+					end if;
 				end if;
 			end if;
 		sum_total_vector <= std_logic_vector(to_signed(sum_total,STOCK_WIDTH*3));
@@ -145,20 +194,7 @@ begin
 	stock_out <= stock;
 	ready <= ready_out;
 
-	--implement some kind of big adder that will take all of these inputs and add them up?
-	--implement a 4:1, 8:1, 16:1, 32:1, 64:1 adders (in increasing order so we can use the previous ones)
-
-	--process to increase the counter by however many adders we have
-
-	--on the clock tick, save the data in a flip flop 
-		--or in a register if necesary?
-		--no idea here
-
-	--and reset the counter (that's also a flip flop)
-
-	--then implement division
-
-	--and output the final stock price from there along with a 'ready' signal
+	
 
 end architecture;
 
