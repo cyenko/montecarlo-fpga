@@ -43,7 +43,11 @@ ARCHITECTURE behavioral OF constant_generator IS
 	SIGNAL u_t,not_ut : std_logic_vector(STOCK_WIDTH-1 downto 0);
 	SIGNAL minus_ut : std_logic_vector(STOCK_WIDTH-1 downto 0);
 
+	SIGNAL negative: std_logic;
+	SIGNAL to_exp_A : std_logic_vector(STOCK_WIDTH-1 downto 0);
+
 BEGIN
+	negative <= '0';
 	before_t_ext <= (others=>'0');
 	after_t_ext <= (others=>'0');
 	t_extended <= before_t_ext & t & after_t_ext;
@@ -64,8 +68,16 @@ BEGIN
 		u_variable := to_integer(unsigned(u));
 		half_v_sq := to_integer(unsigned(half_vol_squared));
 		--u - hvsq
-		u_minus_hvsq := u_variable - half_v_sq;
+		if u_variable > half_v_sq then 
+			u_minus_hvsq := u_variable - half_v_sq;
+			negative <= '0';
+		else 
+			u_minus_hvsq := half_v_sq - u_variable;
+			negative <= '1';
+		end if;
+--		u_minus_hvsq := u_variable - half_v_sq;
 		u_minus_half_vv <= std_logic_vector(to_unsigned(u_minus_hvsq,STOCK_WIDTH));
+
 
 	end process subtract_from_u;
 
@@ -74,9 +86,11 @@ BEGIN
 	u_minus_half_vol_sq_t_map : fixedpoint_multiply PORT MAP (clk,u_minus_half_vv,t_extended,u_minus_half_vol_sq_t);
 
 	--now exp(that)
+	to_exp_A <= negative & u_minus_half_vol_sq_t(STOCK_WIDTH-2 downto 0);
+
 	exp_a_map : exp_fn PORT MAP (
 		clk=>clk, 
-		bitVector => u_minus_half_vol_sq_t, 
+		bitVector => to_exp_A, 
 		outVector=>exp_u_m_h_vv_t
 	);
 
