@@ -111,18 +111,19 @@ BEGIN
 		);
 
 	--not_ut <= not u_t;
-	NOT_UT_MAP : for i in 0 to STOCK_WIDTH-1 generate
-	  not_ut(i) <= not u_t(i);
-	END GENERATE;
+	--NOT_UT_MAP : for i in 0 to STOCK_WIDTH-1 generate
+	--  not_ut(i) <= not u_t(i);
+	--END GENERATE;
 	
 	
-	minus_ut_map : process (clk,not_ut) is
-		variable result : integer := 0;
-		BEGIN
-			result := to_integer(unsigned(not_ut)) + 1;
-			minus_ut <= std_logic_vector(to_unsigned(result,STOCK_WIDTH));
-	end process minus_ut_map;
+--	minus_ut_map : process (clk,not_ut) is
+--		variable result : integer := 0;
+--		BEGIN
+--			result := to_integer(unsigned(not_ut)) + 1;
+--			minus_ut <= std_logic_vector(to_unsigned(result,STOCK_WIDTH));
+--	end process minus_ut_map;
 
+	minus_ut <= '1'&u_t(STOCK_WIDTH-2 downto 0);
 	C_map : exp_fn PORT MAP (clk,minus_ut,C);
 
 	--for now, just set is as 1?? not really sure what to do here

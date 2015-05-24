@@ -7,9 +7,10 @@ use ieee.numeric_std.all;    -- for UNSIGNED
 package monte_carlo is 
  
 	constant STOCK_W: natural := 16;
-	constant N_NUMBER : natural := 1024*1024;
+	--constant N_NUMBER : natural := 1024*1024;
+	constant N_NUMBER : natural := 256;
 	constant N_PAR : natural := 8;
-	constant log2_N_NUMBER : natural := 20; --equal to log2(N_NUMBER)
+	constant log2_N_NUMBER : natural := 8; --equal to log2(N_NUMBER)
 	constant TIME_W : natural := 4;
 
 	COMPONENT project392 is 
