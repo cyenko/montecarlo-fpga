@@ -33,7 +33,7 @@ entity top_fpga is
 	 premium : out std_logic_vector (STOCK_WIDTH -1 downto 0);  --32 bits long
 	 stock_out : out std_logic_vector (STOCK_WIDTH - 1 downto 0); --32 bits long
 	 ready : out std_logic;
-	 progress_led : out std_logic_vector(9 downto 0), --to display the progress of the operation
+	 progress_led : out std_logic_vector(9 downto 0); --to display the progress of the operation
 
 	 reset : in std_logic
 
@@ -77,7 +77,8 @@ begin
 		A => A,
 		B => B,
 		C => C,
-		constants_ready => constants_ready
+		constantReady => constants_ready,
+		reset => '0'
 		);
 
 
@@ -91,7 +92,8 @@ begin
 			C => C,
 			constants_ready => constants_ready,
 			data_out => n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)),
-			pricer_ready => pricers_ready(i)
+			pricer_ready => pricers_ready(i),
+			reset => reset
 		);
 	end GENERATE;
 

@@ -36,32 +36,35 @@ ARCHITECTURE behavioral OF constant_generator IS
 	SIGNAL t_extended : std_logic_vector (STOCK_WIDTH-1 downto 0);
 	SIGNAL sqrt_t : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 
-	SIGNAL before_t_ext : std_logic_vector(STOCK_WIDTH/2-T_WIDTH);
-	SIGNAL after_t_ext : std_logic_vector(STOCK_WIDTH/2);
+	SIGNAL before_t_ext : std_logic_vector(STOCK_WIDTH/2-T_WIDTH-1 downto 0);
+	SIGNAL after_t_ext : std_logic_vector(STOCK_WIDTH/2-1 downto  0);
+	SIGNAL t_size8 : std_logic_vector(STOCK_WIDTH/2-1 downto 0);
 
-	SIGNAL u_t : std_logic_vector(STOCK_WIDTH-1 downto 0);
-	SIGNAL minus_u_t : std_logic_vector(STOCK_WIDTH-1 downto 0);
+	SIGNAL u_t,not_ut : std_logic_vector(STOCK_WIDTH-1 downto 0);
+	SIGNAL minus_ut : std_logic_vector(STOCK_WIDTH-1 downto 0);
 
 BEGIN
 	before_t_ext <= (others=>'0');
 	after_t_ext <= (others=>'0');
 	t_extended <= before_t_ext & t & after_t_ext;
+	t_size8 <= "0000"&t;
 
 
 	--A = Stock * exp (u-0.5*vol*vol)t
 	vol_squared_map : fixedpoint_multiply PORT MAP (clk,vol,vol,vol_squared);
-	half_vol_squared_map : vol_squared_over_2 <= vol_squared(STOCK_WIDTH-1) & vol_squared(STOCK_WIDTH-1 downto 1);
+	
+	half_vol_squared_map : half_vol_squared <= vol_squared(STOCK_WIDTH-1) & vol_squared(STOCK_WIDTH-1 downto 1);
 
 	subtract_from_u :process (clk,u,half_vol_squared) is 
-		variable u : integer := 0;
+		variable u_variable : integer := 0;
 		variable half_v_sq: integer;
 		variable u_minus_hvsq: integer;		
 
 		BEGIN
-		u := to_integer(unsigned(u));
-		half_v_sq := to_integer(unsigned(vol_squared_over_2));
+		u_variable := to_integer(unsigned(u));
+		half_v_sq := to_integer(unsigned(half_vol_squared));
 		--u - hvsq
-		u_minus_hvsq := u - half_v_sq;
+		u_minus_hvsq := u_variable - half_v_sq;
 		u_minus_half_vv <= std_logic_vector(to_unsigned(u_minus_hvsq,STOCK_WIDTH));
 
 	end process subtract_from_u;
@@ -88,7 +91,7 @@ BEGIN
 	--B = vol * sqrt(t)
 	sqrt_t_map : sqrt_fn PORT MAP (
 		clk => clk,
-		bitVector => t_extended,
+		bitVector => t_size8,
 		outVector => sqrt_t
 		);
 
@@ -107,7 +110,12 @@ BEGIN
 		data_out => u_t
 		);
 
-	not_ut <= not u_t;
+	--not_ut <= not u_t;
+	NOT_UT_MAP : for i in 0 to STOCK_WIDTH-1 generate
+	  not_ut(i) <= not u_t(i);
+	END GENERATE;
+	
+	
 	minus_ut_map : process (clk,not_ut) is
 		variable result : integer := 0;
 		BEGIN

@@ -98,7 +98,7 @@ if rising_edge(clk) then
         random <= (others => '0');
     else
         if state = s0 then
-            random <= adder_r;
+            random <= (not adder_r(11)) & adder_r(10 downto 0);
         end if;
         state <= next_state;
 end if;
@@ -119,7 +119,7 @@ case state is
         adder_b <=  uniform2(9)&uniform2(9)&uniform2(9)&uniform2(8 downto 0);
 
         next_state <= s1;
-        ready <= '0';
+        ready <= '1';
 
     when s1 =>
         adder_a <= adder_r;
@@ -131,7 +131,7 @@ case state is
     when s2 =>
         adder_a <= adder_r;
         adder_b <= uniform4(9)&uniform4(9)&uniform4(9)&uniform4(8 downto 0);
-        ready <= '1';
+        ready <= '0';
 
         next_state <= s0;
 

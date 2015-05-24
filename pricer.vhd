@@ -17,7 +17,9 @@ GENERIC (
 		constants_ready : in std_logic;
 
 		data_out : out std_logic_vector(STOCK_WIDTH-1 downto 0);
-		pricer_ready : out std_logic
+		pricer_ready : out std_logic;
+		
+		reset : in std_logic
 	);
 END ENTITY pricer;
 
@@ -32,7 +34,7 @@ ARCHITECTURE behavioral OF pricer IS
 
 	--operation signals
 	-- premium = (strike - (A*e^(B*gauss(0,1))))*C
-	SIGNAL premium : std_logic_vector(STOCK_WIDTH-1 downto 0);
+	SIGNAL premium,gaussian_extended : std_logic_vector(STOCK_WIDTH-1 downto 0);
 	SIGNAL gauss_out : std_logic_vector(12-1 downto 0);
 	SIGNAL gauss_out_ext : std_logic_vector(STOCK_WIDTH-1 downto 0);
 	SIGNAL B_x_gauss : std_logic_vector(STOCK_WIDTH-1 downto 0);
@@ -83,18 +85,18 @@ BEGIN
 				else
 					next_state <= s0;
 				end if;
-				ready_pricer <= '0';
+				pricer_ready <= '0';
 			when s1 =>
 				if gauss_ready='1' then
 					next_state <= s2;
 				else
 					next_state <= s1;
 				end if;
-				ready_pricer <='0';
+				pricer_ready <='0';
 			when s2 =>
 				--in theory , you're grabbing and just putting it out
 				next_state <= s0;
-				ready_pricer <= '1';
+				pricer_ready <= '1';
 		end case;
 	end process;
 
@@ -124,7 +126,7 @@ BEGIN
 				cin => '0',
 				x => gaussian_extended,
 				y => minus_2,
-				data_out => gauss_out_ext
+				z => gauss_out_ext
 			);
 
 

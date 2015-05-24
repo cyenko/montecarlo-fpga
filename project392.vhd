@@ -23,13 +23,15 @@ entity project392 is
 			 strike_price :  in std_logic_vector (STOCK_WIDTH -1 downto 0);  --from 0 to 63
 			 t : in std_logic_vector(T_WIDTH-1 downto 0); --from 0 to 15 days'
 			 vol : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
+			 u : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			 
 			 --Outputs 
 			 --premium_led is the width that will map entirely to the LEDs 
 			 premium_led : out std_logic_vector (7*(STOCK_WIDTH/4) -1 downto 0);
 			 --stock_out_led : out std_logic_vector (STOCK_WIDTH*2 - 1 downto 0)
 			 ready : out std_logic;
-			 progress_led : out std_logic_vector(9 downto 0)
+			 progress_led : out std_logic_vector(9 downto 0);
+			 reset : in std_logic
 	); 
 end entity project392; 
  
@@ -55,8 +57,10 @@ architecture structural of project392 is
 		strike_price=>strike_price,
 		t=>t,
 		u=>u,
+		vol => vol,
 		premium=>premium,
 		ready=>ready,
+		reset => reset,
 		progress_led=>progress_led
 	);
 

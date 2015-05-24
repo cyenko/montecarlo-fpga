@@ -25,6 +25,7 @@ package monte_carlo is
 			 strike_price :  in std_logic_vector (STOCK_WIDTH -1 downto 0);  --from 0 to 63
 			 t : in std_logic_vector(T_WIDTH-1 downto 0); --from 0 to 15 days'
 			 vol : in std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
+			 u : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 
 			 --Outputs 
 			 --premium_led is the width that will map entirely to the LEDs 
@@ -112,7 +113,9 @@ package monte_carlo is
 			constants_ready : in std_logic;
 
 			data_out : out std_logic_vector(STOCK_WIDTH-1 downto 0);
-			pricer_ready : out std_logic
+			pricer_ready : out std_logic;
+			
+			reset : in std_logic
 		);
 	end COMPONENT pricer;
 
@@ -161,7 +164,8 @@ package monte_carlo is
 		PORT (
 			clk : in std_logic;
 			reset : in std_logic;
-			random : out std_logic_vector(11 downto 0)
+			random : out std_logic_vector(11 downto 0);
+			ready : out std_logic
 		);
 	END COMPONENT random_gaussian;
 
