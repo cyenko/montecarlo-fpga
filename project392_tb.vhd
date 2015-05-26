@@ -42,10 +42,10 @@ BEGIN
 
     test_proc : PROCESS
     BEGIN
-        stock_price_tb <= x"0100";
-        strike_price_tb <= x"0180";
-        t_tb <= x"d";
-        vol_tb <= x"0100";
+        stock_price_tb <= x"3700";
+        strike_price_tb <= x"3200";
+        t_tb <= x"5";
+        vol_tb <= x"0040";
         start_tb <= '1';
         wait for 5 ns;
         clk_tb <= not '0';

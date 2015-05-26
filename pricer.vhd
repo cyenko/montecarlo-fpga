@@ -181,6 +181,7 @@ BEGIN
 
 	--put it as the output!
 	premium <= premium_result;
+	data_out <= premium;
 
 end architecture behavioral;
 

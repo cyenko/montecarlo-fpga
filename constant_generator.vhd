@@ -47,7 +47,7 @@ ARCHITECTURE behavioral OF constant_generator IS
 	SIGNAL to_exp_A : std_logic_vector(STOCK_WIDTH-1 downto 0);
 
 BEGIN
-	negative <= '0';
+	--negative <= '0';
 	before_t_ext <= (others=>'0');
 	after_t_ext <= (others=>'0');
 	t_extended <= before_t_ext & t & after_t_ext;

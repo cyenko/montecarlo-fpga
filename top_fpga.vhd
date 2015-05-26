@@ -86,7 +86,7 @@ begin
 	loop_k : for i in 0 to (NUM_PARALLEL-1) GENERATE 
 		pricer_map : pricer PORT MAP (
 			clk=>clk,
-			Strike => strike,
+			Strike => strike_price ,
 			A => A,
 			B => B,
 			C => C,
