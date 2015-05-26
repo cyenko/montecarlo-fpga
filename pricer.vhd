@@ -45,9 +45,14 @@ ARCHITECTURE behavioral OF pricer IS
 	SIGNAL premium_result : std_logic_vector(STOCK_WIDTH-1 downto 0);
 
 	SIGNAL minus_2 : std_logic_vector(STOCK_WIDTH-1 downto 0);
+	SIGNAL max_signal : std_logic_vector(STOCK_WIDTH-1 downto 0);
+
+	SIGNAL zeros : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 
 
 BEGIN
+
+	zeros <= (others=>'0');
 	
 	minus_2 <= "1111111000000000";
 	--2 = 			00000010.00000000
@@ -171,10 +176,18 @@ BEGIN
 			z => Strike_minus_Aexp_Bgauss
 		);
 
+	max_0_or_signal_map : mux_n GENERIC MAP (n=>STOCK_WIDTH)
+		PORT MAP (
+			sel => Strike_minus_Aexp_Bgauss(STOCK_WIDTH-1),
+			src0 => Strike_minus_Aexp_Bgauss,
+			src1 => zeros,
+			z => max_signal
+		);
+
 	--now times C for the output
 	premium_map : fixedpoint_multiply PORT MAP (
 			clk => clk,
-			data_in1 => Strike_minus_Aexp_Bgauss,
+			data_in1 => max_signal,
 			data_in2 => C,
 			data_out => premium_result
 		);

@@ -1767,13 +1767,40 @@ constant exp_lut : rom := (0 => "0000000100000000",
 34192 => "0000000000000000",34193 => "0000000000000000",34194 => "0000000000000000",
 others =>"0000000000000000"
 );
+
+SIGNAL not_index,minus_index,zeros : std_logic_vector(15 downto 0);
+
 begin
+	
+	zeros <= (others=>'0');
+
+	not_index_map : for i in 0 to 15 GENERATE 
+		not_map : not_index(i) <= not bitVector(i);
+	end GENERATE;
+
+	minus_index_map : fulladder_n 
+		GENERIC MAP (n=>16)
+		PORT MAP (
+			cin => '1',
+			x => not_index,
+			y => zeros,
+			z => minus_index
+			);
+
 
 	findValue: process (clk,bitVector) is 
 		variable index : integer := 0;
+		variable index_sign : integer := 0;
+		variable temp_index : std_logic_vector(15 downto 0); 
 
 		BEGIN  
-			index := to_integer(unsigned(bitVector));
+			if bitVector(15)='1' then
+				temp_index := '1'&minus_index(14 downto 0);
+			else
+				temp_index := bitVector;
+			end if;
+
+			index := to_integer(unsigned(temp_index));
 			if index < 3000 then
 				outVector <= exp_lut(index);
 			else 

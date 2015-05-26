@@ -8,9 +8,9 @@ package monte_carlo is
  
 	constant STOCK_W: natural := 16;
 	--constant N_NUMBER : natural := 1024*1024;
-	constant N_NUMBER : natural := 256;
+	constant N_NUMBER : natural := 1024;
 	constant N_PAR : natural := 8;
-	constant log2_N_NUMBER : natural := 8; --equal to log2(N_NUMBER)
+	constant log2_N_NUMBER : natural := 10; --equal to log2(N_NUMBER)
 	constant TIME_W : natural := 4;
 
 	COMPONENT project392 is 
@@ -182,6 +182,18 @@ package monte_carlo is
 		    z     : out std_logic_vector(n-1 downto 0)
   		);
 	end COMPONENT fulladder_n;
+
+	COMPONENT mux_n is
+	  generic (
+		n	: integer
+	  );
+	  port (
+		sel	  : in	std_logic;
+		src0  :	in	std_logic_vector(n-1 downto 0);
+		src1  :	in	std_logic_vector(n-1 downto 0);
+		z	  : out std_logic_vector(n-1 downto 0)
+	  );
+	end COMPONENT mux_n;
 
  --Other constants, types, subroutines, COMPONENTs go here 
  

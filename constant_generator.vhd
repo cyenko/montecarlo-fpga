@@ -46,7 +46,12 @@ ARCHITECTURE behavioral OF constant_generator IS
 	SIGNAL negative: std_logic;
 	SIGNAL to_exp_A : std_logic_vector(STOCK_WIDTH-1 downto 0);
 
+	SIGNAL zeros : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
+
 BEGIN
+
+	zeros <= (others=>'0');
+
 	--negative <= '0';
 	before_t_ext <= (others=>'0');
 	after_t_ext <= (others=>'0');
@@ -124,20 +129,21 @@ BEGIN
 		data_out => u_t
 		);
 
-	--not_ut <= not u_t;
-	--NOT_UT_MAP : for i in 0 to STOCK_WIDTH-1 generate
-	--  not_ut(i) <= not u_t(i);
-	--END GENERATE;
+	not_ut <= not u_t;
+	NOT_UT_MAP : for i in 0 to STOCK_WIDTH-1 generate
+	  not_ut(i) <= not u_t(i);
+	END GENERATE;
 	
 	
---	minus_ut_map : process (clk,not_ut) is
---		variable result : integer := 0;
---		BEGIN
---			result := to_integer(unsigned(not_ut)) + 1;
---			minus_ut <= std_logic_vector(to_unsigned(result,STOCK_WIDTH));
---	end process minus_ut_map;
+	minus_ut_map : fulladder_n GENERIC MAP (n=>STOCK_WIDTH)
+		PORT MAP (
+			cin => '1',
+			x => not_ut,
+			y => zeros,
+			z => minus_ut
+		);
 
-	minus_ut <= '1'&u_t(STOCK_WIDTH-2 downto 0);
+--	minus_ut <= '1'&u_t(STOCK_WIDTH-2 downto 0);
 	C_map : exp_fn PORT MAP (clk,minus_ut,C);
 
 	--for now, just set is as 1?? not really sure what to do here
