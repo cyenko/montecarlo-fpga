@@ -1,0 +1,174 @@
+C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/project392.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/project392.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity project392
+-- Compiling architecture structural of project392
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/fixedpoint_multiply_tb.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/fixedpoint_multiply_tb.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity fixedpoint_multiply_tb
+-- Compiling architecture structural of fixedpoint_multiply_tb
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/random_uniform.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/random_uniform.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity random_uniform
+-- Compiling architecture Behavioral of random_uniform
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/constant_generator.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/constant_generator.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity constant_generator
+-- Compiling architecture behavioral of constant_generator
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/random_gaussian_test_bench.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/random_gaussian_test_bench.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_textio
+-- Loading package NUMERIC_STD
+-- Compiling entity random_gaussian_test_bench
+-- Compiling architecture behavior of random_gaussian_test_bench
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/fixedpoint_multiply.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/fixedpoint_multiply.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity fixedpoint_multiply
+-- Compiling architecture behavioral of fixedpoint_multiply
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/random_fn.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/random_fn.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity random_fn
+-- Compiling architecture behavioral of random_fn
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/sqrt_fn.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/sqrt_fn.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity sqrt_fn
+-- Compiling architecture behavioral of sqrt_fn
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/pricer.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/pricer.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity pricer
+-- Compiling architecture behavioral of pricer
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/mux_n.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/mux_n.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity mux_n
+-- Compiling architecture behavioral of mux_n
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/exp_fn.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/exp_fn.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity exp_fn
+-- Compiling architecture behavioral of exp_fn
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/fulladder_n.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/fulladder_n.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity fulladder_n
+-- Compiling architecture behavioral of fulladder_n
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/leddcd.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/leddcd.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity leddcd
+-- Compiling architecture data_flow of leddcd
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/adder_signed.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/adder_signed.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity adder_signed
+-- Compiling architecture behavioral of adder_signed
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/project392_tb.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/project392_tb.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity project392_tb
+-- Compiling architecture struct of project392_tb
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/exp_tb.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/exp_tb.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package monte_carlo
+-- Compiling entity exp_tb
+-- Compiling architecture structural of exp_tb
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/monte_carlo.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/monte_carlo.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling package monte_carlo
+-- Compiling package body monte_carlo
+-- Loading package monte_carlo
+
+} {} {}} C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/random_gaussian.vhd {1 {vcom -work work -2002 -explicit C:/Users/Bruno/Dropbox/Northwestern/2014-2015/SPRING2015/EECS392/working_4am/random_gaussian.vhd
+Model Technology ModelSim ALTERA vcom 10.1e Compiler 2013.06 Jun 12 2013
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity random_gaussian
+-- Compiling architecture Behavioral of random_gaussian
+
+} {} {}}

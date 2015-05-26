@@ -13,6 +13,10 @@ package monte_carlo is
 	constant log2_N_NUMBER : natural := 10; --equal to log2(N_NUMBER)
 	constant TIME_W : natural := 4;
 
+	COMPONENT project_tb is 
+
+	END COMPONENT project_tb;
+
 	COMPONENT project392 is 
 		GENERIC (
 			STOCK_WIDTH : natural := STOCK_W;
@@ -31,6 +35,7 @@ package monte_carlo is
 			 --Outputs 
 			 --premium_led is the width that will map entirely to the LEDs 
 			 premium_led : out std_logic_vector (7*(STOCK_WIDTH/4) -1 downto 0);
+			 premium_out : out std_logic_vector(STOCK_WIDTH-1 downto 0);
 			 --stock_out_led : out std_logic_vector (STOCK_WIDTH*2 - 1 downto 0)
 			 ready : out std_logic;
 			 progress_led : out std_logic_vector(9 downto 0);

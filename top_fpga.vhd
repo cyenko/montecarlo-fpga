@@ -117,6 +117,8 @@ begin
 		variable Num : integer := NUM_ITERATIONS;
 		variable Price : integer :=0;
 		variable Progress: integer := 0;
+		variable debug: integer := 0;
+		variable debug_2 : integer := 0;
 		BEGIN  
 			if reset='1' then
 				Progress:= 0;
@@ -134,6 +136,7 @@ begin
 						readyn := 0;
 						sum_total := 0;
 						Price := 0;
+						debug := 1;
 					else
 						started := started;
 						Price := Price;
@@ -141,11 +144,13 @@ begin
 						readyn := ready_next;
 						sum_total := sum_total;
 						Progress := Progress /(1024);
-						
+						debug := 0;
 					end if;
+					
 					if started='1' then 
 						--only do stuff if the pricers are ready
 						if pricer_ready='1' then 
+							debug_2 := 3;
 							temp_sum := 0;
 							for i in 0 to k-1 loop 
 								--add it all up in a temporary variable
@@ -155,6 +160,7 @@ begin
 							sum_total := sum_total + (temp_sum); 
 							readyn := readyn + k;
 							if readyn=Num then
+								--debug_2 := 4;
 								ready_out <= '1';
 								ready_next := 0;
 								started := '0';
@@ -163,10 +169,12 @@ begin
 								started := '0';
 							else 
 								Price := 00;
+
 								ready_out <= '0';
 								ready_next := readyn;
 							end if;
 						else 
+							debug_2 := 5;
 							temp_sum := temp_sum;
 							sum_total := sum_total;
 							ready_next := ready_next;
