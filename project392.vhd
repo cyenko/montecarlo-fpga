@@ -45,8 +45,21 @@ architecture structural of project392 is
 	SIGNAL premium_led_in : std_logic_vector (7*(STOCK_WIDTH/4) -1 downto 0);
 	signal READY_IN : std_logic;
 
+	SIGNAL strike_in, vol_in, u_in : std_logic_vector(STOCK_WIDTH-1 downto 0);
+	SIGNAL t_in : std_logic_vector(T_WIDTH-1 DOWNTO 0);
+
 	
 	BEGIN 
+
+--	strike_in <= strike;
+--	vol_in <= vol;
+--	u_in <= u;
+--	t_in <= t;
+	strike_in <= x"3200";
+	vol_in <= x"0040";
+	u_in <= x"0020";
+	t_in <= x"5";
+
 
 	zeros <= (others=>'0');
 	--used in synthesis. comment this line out for simulation
@@ -58,10 +71,10 @@ architecture structural of project392 is
 		clk=>clk,
 		start=>not_start,
 		stock_price=>stock_price,
-		strike_price=>strike_price,
-		t=>t,
-		u=>u,
-		vol => vol,
+		strike_price=>strike_in,
+		t=>t_in,
+		u=>u_in,
+		vol => vol_in,
 		premium=>premium,
 		ready=>ready_in,
 		reset => reset,
