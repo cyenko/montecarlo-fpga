@@ -1,6 +1,8 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use IEEE.std_logic_signed.all;
+use IEEE.std_logic_unsigned.all;
 use work.monte_carlo.all;
 
 
@@ -125,24 +127,23 @@ BEGIN
 	--make it into a correct thing (eliminate the least 2 significant bits)
 	gaussian_extended <= "000000"&gauss_out(11 downto 2);
 
-	gaussian_correct_map : fulladder_n 
-		GENERIC MAP ( n => STOCK_WIDTH)
-		PORT MAP (
-				cin => '0',
-				x => gaussian_extended,
-				y => minus_2,
-				z => gauss_out_ext
-			);
-
-
-
+--	gaussian_correct_map : fulladder_n 
+--		GENERIC MAP ( n => STOCK_WIDTH)
+--		PORT MAP (
+--				cin => '0',
+--				x => gaussian_extended,
+--				y => minus_2,
+--				z => gauss_out_ext
+--			);
+	gauss_out_ext <= std_logic_vector(signed(gaussian_extended) + signed(minus_2));
 	--get B*gauss(0,1)
-	b_x_gauss_map : fixedpoint_multiply PORT MAP (
-			clk => clk,
-			data_in1 => B,
-			data_in2 => gauss_out_ext,
-			data_out => B_x_gauss
-		);
+--	b_x_gauss_map : fixedpoint_multiply PORT MAP (
+--			clk => clk,
+--			data_in1 => B,
+--			data_in2 => gauss_out_ext,
+--			data_out => B_x_gauss
+--		);
+	B_x_gauss <= std_logic_vector(signed(B) * signed(gauss_out_ext))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 
 	exp_Bxgauss_map : exp_fn PORT MAP (
 			clk => clk,
@@ -151,50 +152,73 @@ BEGIN
 		);
 
 
-	A_x_expBxgauss_map : fixedpoint_multiply PORT MAP (
-			clk => clk,
-			data_in1 => A,
-			data_in2 => exp_Bxgauss,
-			data_out => A_x_expBxgauss
-		);
+--	A_x_expBxgauss_map : fixedpoint_multiply PORT MAP (
+--			clk => clk,
+--			data_in1 => A,
+--			data_in2 => exp_Bxgauss,
+--			data_out => A_x_expBxgauss
+--		);
+	A_x_expBxgauss <= std_logic_vector(signed(A) * signed(exp_Bxgauss))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 
 	--do something for put/? operation!!!!
 	--right now, assume just this: (Strike - A*exp(B*gauss(0,1)))*C
 	--add strike + not(A_x_expBxgauss) + cin='1'
 
 	--NEGATE IT!
-	not_map : for i in 0 to STOCK_WIDTH-1 GENERATE
-		not_bit_map : not_A_x_expBxgauss(i) <= not A_x_expBxgauss(i);
-	END GENERATE;
+--	not_map : for i in 0 to STOCK_WIDTH-1 GENERATE
+--		not_bit_map : not_A_x_expBxgauss(i) <= not A_x_expBxgauss(i);
+--	END GENERATE;
+--
+--	Strike_minus_Aexp_Bgauss_map : fulladder_n 
+--		GENERIC MAP (n=>STOCK_WIDTH) 
+--		PORT MAP (
+--			cin => '1',
+--			x => Strike,
+--			y => not_A_x_expBxgauss,
+--			z => Strike_minus_Aexp_Bgauss
+--		);
 
-	Strike_minus_Aexp_Bgauss_map : fulladder_n 
-		GENERIC MAP (n=>STOCK_WIDTH) 
-		PORT MAP (
-			cin => '1',
-			x => Strike,
-			y => not_A_x_expBxgauss,
-			z => Strike_minus_Aexp_Bgauss
-		);
+	Strike_minus_Aexp_Bgauss <= std_logic_vector(signed(Strike) - signed(A_x_expBxgauss));
 
-	max_0_or_signal_map : mux_n GENERIC MAP (n=>STOCK_WIDTH)
-		PORT MAP (
-			sel => Strike_minus_Aexp_Bgauss(STOCK_WIDTH-1),
-			src0 => Strike_minus_Aexp_Bgauss,
-			src1 => zeros,
-			z => max_signal
-		);
-
+	process(Strike_minus_Aexp_Bgauss,zeros) is 
+	begin 
+		if signed (Strike_minus_Aexp_Bgauss) < 0 then 
+			max_signal <= zeros;
+		else 
+			max_signal <= Strike_minus_Aexp_Bgauss;
+		end if;
+	end process;
+--	max_0_or_signal_map : mux_n GENERIC MAP (n=>STOCK_WIDTH)
+--		PORT MAP (
+--			sel => Strike_minus_Aexp_Bgauss(STOCK_WIDTH-1),
+--			src0 => Strike_minus_Aexp_Bgauss,
+--			src1 => zeros,
+--			z => max_signal
+--		);
+	
 	--now times C for the output
-	premium_map : fixedpoint_multiply PORT MAP (
-			clk => clk,
-			data_in1 => max_signal,
-			data_in2 => C,
-			data_out => premium_result
-		);
+	premium_result <= std_logic_vector(signed(max_signal) * signed(C))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+--	premium_map : fixedpoint_multiply PORT MAP (
+--			clk => clk,
+--			data_in1 => max_signal,
+--			data_in2 => C,
+--			data_out => premium_result
+--		);
 
 	--put it as the output!
 	premium <= premium_result;
-	data_out <= premium;
+	clocked_out : process(clk,reset):
+	begin
+		if reset='1' then
+			data_out <= zeros;
+		else
+			if rising_edge(clk) then 
+				data_out <= premium;
+			end if;
+		end if;
+	end process;
+
+	--data_out <= premium;
 
 end architecture behavioral;
 

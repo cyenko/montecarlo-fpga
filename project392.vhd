@@ -1,11 +1,10 @@
------------------------------------------------------------------------------ 
-library IEEE; 
- 
-use IEEE.std_logic_1164.all; 
---Additional standard or custom libraries go here 
---use work.calculator.all;
+library IEEE;
+use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
-use WORK.monte_carlo.all;
+use IEEE.std_logic_signed.all;
+use IEEE.std_logic_unsigned.all;
+use work.monte_carlo.all;
+
 
 --takes as inputs the stock price, strike price, start, and t
 --goes down to top_fpga
@@ -43,13 +42,16 @@ architecture structural of project392 is
 	SIGNAL stock_out : std_logic_vector (STOCK_WIDTH - 1 downto 0);
 	SIGNAL zeros : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0); 
 	SIGNAL not_start : std_logic;
+	SIGNAL premium_led_in : std_logic_vector (7*(STOCK_WIDTH/4) -1 downto 0);
+	signal READY_IN : std_logic;
+
 	
 	BEGIN 
 
 	zeros <= (others=>'0');
 	--used in synthesis. comment this line out for simulation
 	not_start <= not start;
-	premium_out <= premium;
+--	premium_out <= premium;
  		--Structural design goes here for the pricer
 
 	T1: top_fpga PORT MAP(
@@ -61,7 +63,7 @@ architecture structural of project392 is
 		u=>u,
 		vol => vol,
 		premium=>premium,
-		ready=>ready,
+		ready=>ready_in,
 		reset => reset,
 		progress_led=>progress_led
 	);
@@ -69,8 +71,18 @@ architecture structural of project392 is
 	--mapping results to the LEDs
 	loop_led_premium: for i in 0 to ((STOCK_WIDTH/4)-1) GENERATE 
 		begin
-			led_map : leddcd PORT MAP (premium((i+1)*4-1 downto (i)*4),premium_led((i+1)*7-1 downto (i)*7));
+			led_map : leddcd PORT MAP (data_in=>premium((i+1)*4-1 downto (i)*4),segments_out=>premium_led_in((i+1)*7-1 downto (i)*7));
 	end GENERATE;
+
+	clocked_out : process(clk) is 
+	begin 
+		if rising_edge(clk) then 
+			premium_led <= premium_led_in;
+			premium_out <= premium;
+			ready <= ready_in;
+		end if;
+	end process;
+	
 
 
 end architecture structural; 

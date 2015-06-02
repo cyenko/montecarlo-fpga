@@ -15,21 +15,6 @@ architecture data_flow of leddcd is
 signal A,B,C,D : std_logic;
 begin
 
---Using Logic Operators to describe actions of decoder
-
---A <= data_in(3);
---B <= data_in(2);
---C <= data_in(1);
---D <= data_in(0);
---
---segments_out(0) <= NOT (A OR C OR (B AND D) OR ((NOT A) AND (NOT B) AND (NOT C) AND (NOT D)));
---segments_out(1) <= NOT ((NOT B) OR ((NOT A) AND (NOT C) AND (NOT D)) OR (A AND (NOT C) AND D) OR ((NOT A) AND C AND D));
---segments_out(2) <= NOT (((NOT A) AND B) OR (A AND (NOT B)) OR ((NOT C) AND D) OR ((NOT A) AND (NOT B) AND D) OR ((NOT A) AND (NOT C) AND (NOT D)));
---segments_out(3) <= NOT (((NOT A) AND (NOT B) AND (NOT D)) OR (B AND (NOT C) AND D) OR (B AND C AND (NOT D)) OR ((NOT B) AND C AND D) OR (A AND (NOT C) AND (NOT D)));
---segments_out(4) <= NOT (((NOT A) AND (NOT B) AND (NOT D)) OR (C AND (NOT D)) OR (A AND B AND C) OR (A AND (NOT B)) OR (A AND (NOT C) AND (NOT D)));
---segments_out(5) <= NOT (A OR (B AND C AND (NOT D)) OR ((NOT C) AND (NOT D)) OR ((NOT A) AND B AND (NOT C)));
---segments_out(6) <= NOT (((NOT A) AND (NOT B) AND C) OR ((NOT A) AND B AND (NOT C)) OR (A AND (NOT B)) OR (A AND C) OR (C AND (NOT D)));
-
 segments_out <= "1000000" when data_in = "0000" else
 	"1111001" when data_in = "0001" else --1
 	"0100100" when data_in = "0010" else --2

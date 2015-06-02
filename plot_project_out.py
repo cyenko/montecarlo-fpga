@@ -25,7 +25,7 @@ for each in lines_array:
 	num = float(integer_decimal)+decimal_decimal
 	number.append(num)
 
-plt.hist(number,bins=50)
+plt.hist(number,bins=30)
 plt.show()
 
 print "Average: ",sum(number)/len(number)

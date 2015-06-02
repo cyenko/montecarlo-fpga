@@ -1,10 +1,9 @@
------------------------------------------------------------------------------ 
-library IEEE; 
- 
-use IEEE.std_logic_1164.all; 
-use WORK.monte_carlo.all; 
---Additional standard or custom libraries go here 
+library IEEE;
+use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use IEEE.std_logic_signed.all;
+use IEEE.std_logic_unsigned.all;
+use work.monte_carlo.all;
 
 --inputs: clock, start, stock price, strike, t
 --output: premium, stock price out, ready
