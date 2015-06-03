@@ -6,6 +6,7 @@ entity random_gaussian is
     Port ( 
       clk : in  STD_LOGIC;
       reset : in  STD_LOGIC;
+      seed_alterator : in std_logic_vector(5 downto 0);
       random : out  STD_LOGIC_VECTOR (11 downto 0);
       ready : out std_logic
     );
@@ -41,12 +42,20 @@ signal adder_r : std_logic_vector(11 downto 0);
 
 type statetype is (s0, s1, s2);
 
+signal seed_1,seed_2,seed_3,seed_4 : std_logic_vector(30 downto 0);
+
 signal state, next_state: statetype := s0;
 
 begin
 
+seed_1 <= std_logic_vector(to_unsigned(697757461,31))xor std_logic_vector(resize(signed(seed_alterator),31));
+seed_2 <= std_logic_vector(to_unsigned(1885540239,31)) xor std_logic_vector(resize(signed(seed_alterator),31));
+seed_3 <= std_logic_vector(to_unsigned(1505946904,31)) xor std_logic_vector(resize(signed(seed_alterator),31));
+seed_4 <= std_logic_vector(to_unsigned(2693445,31)) xor std_logic_vector(resize(signed(seed_alterator),31));
+
+
 unif1: random_uniform 
-generic map (SEED => std_logic_vector(to_unsigned(697757461,31)),
+generic map (SEED => seed_1,
                  OUT_WIDTH => 10)
 port map(
     clk => clk,
@@ -55,7 +64,7 @@ port map(
 );
 
 unif2: random_uniform 
-generic map (SEED => std_logic_vector(to_unsigned(1885540239,31)),
+generic map (SEED => seed_2,
                  OUT_WIDTH => 10)
 port map(
     clk => clk,
@@ -64,7 +73,7 @@ port map(
 );
 
 unif3: random_uniform 
-generic map (SEED => std_logic_vector(to_unsigned(1505946904,31)),
+generic map (SEED => seed_3,
                  OUT_WIDTH => 10)
 port map(
     clk => clk,
@@ -73,7 +82,7 @@ port map(
 );
 
 unif4: random_uniform 
-generic map (SEED => std_logic_vector(to_unsigned(2693445,31)),
+generic map (SEED => seed_4,
                  OUT_WIDTH => 10)
 port map(
     clk => clk,

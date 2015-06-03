@@ -17,6 +17,7 @@ GENERIC (
 		B : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 		C : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 		constants_ready : in std_logic;
+		seed_alterator : in std_logic_vector(5 downto 0);
 
 		data_out : out std_logic_vector(STOCK_WIDTH-1 downto 0);
 		pricer_ready : out std_logic;
@@ -118,6 +119,7 @@ BEGIN
 		clk => clk,
 		reset => reset,
 		random => gauss_out,
+		seed_alterator => seed_alterator,
 		ready => gauss_ready
 		);
 

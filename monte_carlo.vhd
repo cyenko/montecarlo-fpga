@@ -110,15 +110,16 @@ package monte_carlo is
 
 	COMPONENT pricer is 
 		GENERIC (
-		 	STOCK_WIDTH : natural := STOCK_W
-		 );
-		PORT(
+ 			STOCK_WIDTH : natural := STOCK_W
+ 		);
+		port(
 			clk: in std_logic;
 			Strike : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			A : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			B : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			C : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			constants_ready : in std_logic;
+			seed_alterator : in std_logic_vector(5 downto 0);
 
 			data_out : out std_logic_vector(STOCK_WIDTH-1 downto 0);
 			pricer_ready : out std_logic;
@@ -172,6 +173,8 @@ package monte_carlo is
 		PORT (
 			clk : in std_logic;
 			reset : in std_logic;
+			seed_alterator : in std_logic_vector(5 downto 0);
+
 			random : out std_logic_vector(11 downto 0);
 			ready : out std_logic
 		);
