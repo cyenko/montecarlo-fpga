@@ -52,8 +52,6 @@ ARCHITECTURE behavioral OF constant_generator IS
 
 	SIGNAL 	A_in,B_in,C_in : std_logic_vector (STOCK_WIDTH-1 downto 0);
 	SIGNAL constantReady_in : std_logic;
-
-	SIGNAL vol_squared_long, u_minus_half_vol_sq_t_long, A_in_long,B_in_long, u_t_long : std_logic_vector(STOCK_WIDTH*2-1 DOWNTO 0);
 BEGIN
 
 	zeros <= (others=>'0');
@@ -67,8 +65,7 @@ BEGIN
 
 	--A = Stock * exp (u-0.5*vol*vol)t
 --	vol_squared_map : fixedpoint_multiply PORT MAP (clk,vol,vol,vol_squared);
-	vol_squared_long <= std_logic_vector(signed(vol)*signed(vol));
-	vol_squared <= vol_squared_long(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+	vol_squared <= std_logic_vector(signed(vol)*signed(vol))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 	--divide by 2
 	half_vol_squared_map : half_vol_squared <= vol_squared(STOCK_WIDTH-1) & vol_squared(STOCK_WIDTH-1 downto 1);
 
@@ -95,8 +92,7 @@ BEGIN
 
 	--now multiply by t
 		--extend t first
-	u_minus_half_vol_sq_t_long <= std_logic_vector(signed(u_minus_half_vv) * signed(t_extended));
-	u_minus_half_vol_sq_t <= u_minus_half_vol_sq_t_long(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+	u_minus_half_vol_sq_t <= std_logic_vector(signed(u_minus_half_vv) * signed(t_extended))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 --	u_minus_half_vol_sq_t_map : fixedpoint_multiply PORT MAP (clk,u_minus_half_vv,t_extended,u_minus_half_vol_sq_t);
 
 	--now exp(that)
@@ -108,8 +104,7 @@ BEGIN
 		outVector=>exp_u_m_h_vv_t
 	);
 
-	A_in_long <= std_logic_vector(signed(exp_u_m_h_vv_t) * signed(stock));
-	A_in <= A_in_long(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+	A_in <= std_logic_vector(signed(exp_u_m_h_vv_t) * signed(stock))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 --	A_final_map : fixedpoint_multiply PORT MAP (
 --		clk=>clk,
 --		data_in1 => exp_u_m_h_vv_t,
@@ -125,8 +120,7 @@ BEGIN
 		outVector => sqrt_t
 		);
 
-	B_in_long <= std_logic_vector(signed(vol) * signed(sqrt_t));
-	B_in <= B_in_long(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+	B_in <= std_logic_vector(signed(vol) * signed(sqrt_t))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 --	B_map : fixedpoint_multiply PORT MAP (
 --		clk=>clk,
 --		data_in1 => vol,
@@ -135,8 +129,7 @@ BEGIN
 --		);
 	
 	--C = exp(-u*t)
-	u_t_long <= std_logic_vector(signed(t_extended)*signed(u));
-	u_t <= u_t_long(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+	u_t <= std_logic_vector(signed(t_extended)*signed(u))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 	minus_ut <= std_logic_vector(0 - signed(u_t));
 --	u_t_map : fixedpoint_multiply PORT MAP (
 --		clk =>clk,

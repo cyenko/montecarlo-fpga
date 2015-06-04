@@ -110,7 +110,7 @@ begin
 	end GENERATE;
 
 	--make sure that it's all 1111111
-	pricer_ready <= '1' WHEN unsigned(pricers_ready)=unsigned(lots_of_ones) else '0';
+	pricer_ready <= '1' WHEN pricers_ready=lots_of_ones else '0';
 
 
 

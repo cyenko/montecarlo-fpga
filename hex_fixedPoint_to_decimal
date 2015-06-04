@@ -1,0 +1,7 @@
+import binascii
+
+
+number = raw_input('give me the number in hex (4 digits)!')
+binary = []
+for n in number
+	binary.append(hex(n))

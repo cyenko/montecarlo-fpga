@@ -52,8 +52,6 @@ ARCHITECTURE behavioral OF pricer IS
 
 	SIGNAL zeros : std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 
-	SIGNAL B_x_gauss_long, A_x_expBxgauss_long, premium_result_long : std_logic_vector(STOCK_WIDTH*2-1 downto 0);
-
 
 BEGIN
 
@@ -147,8 +145,7 @@ BEGIN
 --			data_in2 => gauss_out_ext,
 --			data_out => B_x_gauss
 --		);
-	B_x_gauss_long <= std_logic_vector(signed(B) * signed(gauss_out_ext));
-	B_x_gauss <= B_x_gauss_long(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+	B_x_gauss <= std_logic_vector(signed(B) * signed(gauss_out_ext))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 
 	exp_Bxgauss_map : exp_fn PORT MAP (
 			clk => clk,
@@ -163,8 +160,7 @@ BEGIN
 --			data_in2 => exp_Bxgauss,
 --			data_out => A_x_expBxgauss
 --		);
-	A_x_expBxgauss_long <= std_logic_vector(signed(A) * signed(exp_Bxgauss));
-	A_x_expBxgauss <= A_x_expBxgauss_long(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+	A_x_expBxgauss <= std_logic_vector(signed(A) * signed(exp_Bxgauss))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 
 	--do something for put/? operation!!!!
 	--right now, assume just this: (Strike - A*exp(B*gauss(0,1)))*C
@@ -203,8 +199,7 @@ BEGIN
 --		);
 	
 	--now times C for the output
-	premium_result_long <= std_logic_vector(signed(max_signal) * signed(C));
-	premium_result <= premium_result_long(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
+	premium_result <= std_logic_vector(signed(max_signal) * signed(C))(STOCK_WIDTH+STOCK_WIDTH/2-1 downto STOCK_WIDTH/2);
 --	premium_map : fixedpoint_multiply PORT MAP (
 --			clk => clk,
 --			data_in1 => max_signal,
@@ -214,7 +209,7 @@ BEGIN
 
 	--put it as the output!
 	premium <= premium_result;
-	clocked_out : process(clk,reset) is
+	clocked_out : process(clk,reset):
 	begin
 		if reset='1' then
 			data_out <= zeros;
