@@ -28,10 +28,10 @@ entity project392 is
 			 --premium_led is the width that will map entirely to the LEDs 
 			 premium_led : out std_logic_vector (7*(STOCK_WIDTH/4) -1 downto 0);
 			 --stock_out_led : out std_logic_vector (STOCK_WIDTH*2 - 1 downto 0)
-			 premium_out : out std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
+			 --premium_out : out std_logic_vector(STOCK_WIDTH-1 DOWNTO 0);
 			 ready : out std_logic;
-			 progress_led : out std_logic_vector(9 downto 0);
-			 reset : in std_logic
+			 --progress_led : out std_logic_vector(9 downto 0);
+			 reset_in : in std_logic
 	); 
 end entity project392; 
  
@@ -45,6 +45,14 @@ architecture structural of project392 is
 	SIGNAL premium_led_in : std_logic_vector (7*(STOCK_WIDTH/4) -1 downto 0);
 	signal READY_IN : std_logic;
 
+<<<<<<< Updated upstream:project392.vhd
+=======
+	SIGNAL strike_in, vol_in, u_in : std_logic_vector(STOCK_WIDTH-1 downto 0);
+	SIGNAL t_in : std_logic_vector(T_WIDTH-1 DOWNTO 0);
+	
+	SIGNAL reset : std_logic;
+
+>>>>>>> Stashed changes:FINAL_PROJECT/project392.vhd
 	
 	BEGIN 
 
@@ -53,7 +61,7 @@ architecture structural of project392 is
 	not_start <= not start;
 --	premium_out <= premium;
  		--Structural design goes here for the pricer
-
+	reset <= not reset_in;
 	T1: top_fpga PORT MAP(
 		clk=>clk,
 		start=>not_start,
@@ -64,8 +72,8 @@ architecture structural of project392 is
 		vol => vol,
 		premium=>premium,
 		ready=>ready_in,
-		reset => reset,
-		progress_led=>progress_led
+		reset => reset
+		--progress_led=>progress_led
 	);
 
 	--mapping results to the LEDs
@@ -78,7 +86,7 @@ architecture structural of project392 is
 	begin 
 		if rising_edge(clk) then 
 			premium_led <= premium_led_in;
-			premium_out <= premium;
+			--premium_out <= premium;
 			ready <= ready_in;
 		end if;
 	end process;

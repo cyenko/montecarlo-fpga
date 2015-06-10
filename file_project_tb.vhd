@@ -34,7 +34,7 @@ architecture test of project_tb is
     		u => u_tb,
         	t=>t_tb,
         	premium_led => leds,
-        	premium_out => premium_z,
+        	--premium_out => premium_z,
         	ready => ready_z,
         	reset => reset_tb
         );

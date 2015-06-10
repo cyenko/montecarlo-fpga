@@ -57,22 +57,10 @@ SIGNAL constants_ready : std_logic;
 SIGNAL ready_out : std_logic;
 SIGNAL pricer_ready : std_logic;
 
-type array_type is array(1 to NUM_PARALLEL) of std_logic_vector(5 downto 0);
 
-signal seed_alter_array : array_type;
 
 
 begin
-	
-	seed_alter_array(1)<= "110101";
-	seed_alter_array(2)<= "010111";
-	seed_alter_array(3)<= "111101";
-	seed_alter_array(4)<= "010000";
-	seed_alter_array(5)<= "111101";
-	seed_alter_array(6)<= "110110";
-	seed_alter_array(7)<= "001001";
-	seed_alter_array(8)<= "110100";
-
 
 	lots_of_ones <= (others=>'1');
 	--get the stock price in a wire
@@ -101,7 +89,6 @@ begin
 			A => A,
 			B => B,
 			C => C,
-			seed_alterator <= seed_alter_array(i-1),
 			constants_ready => constants_ready,
 			data_out => n(STOCK_WIDTH*(i+1)-1 downto STOCK_WIDTH*(i)),
 			pricer_ready => pricers_ready(i),

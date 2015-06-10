@@ -10,9 +10,15 @@ package monte_carlo is
  
 	constant STOCK_W: natural := 16;
 	--constant N_NUMBER : natural := 1024*1024;
+<<<<<<< Updated upstream:monte_carlo.vhd
 	constant N_NUMBER : natural := 1024;
 	constant N_PAR : natural := 8;
 	constant log2_N_NUMBER : natural := 10; --equal to log2(N_NUMBER)
+=======
+	constant N_NUMBER : natural := 1024*16*32;
+	constant N_PAR : natural := 8;
+	constant log2_N_NUMBER : natural := 19; --equal to log2(N_NUMBER)
+>>>>>>> Stashed changes:FINAL_PROJECT/monte_carlo.vhd
 	constant TIME_W : natural := 4;
 
 	COMPONENT project_tb is 
@@ -37,12 +43,12 @@ package monte_carlo is
 			 --Outputs 
 			 --premium_led is the width that will map entirely to the LEDs 
 			 premium_led : out std_logic_vector (7*(STOCK_WIDTH/4) -1 downto 0);
-			 premium_out : out std_logic_vector(STOCK_WIDTH-1 downto 0);
+			 --premium_out : out std_logic_vector(STOCK_WIDTH-1 downto 0);
 			 --stock_out_led : out std_logic_vector (STOCK_WIDTH*2 - 1 downto 0)
 			 ready : out std_logic;
-			 progress_led : out std_logic_vector(9 downto 0);
+			 --progress_led : out std_logic_vector(9 downto 0);
 
-			 reset : in std_logic
+			 reset_in : in std_logic
 	); 
 	end COMPONENT project392; 
 
@@ -110,16 +116,15 @@ package monte_carlo is
 
 	COMPONENT pricer is 
 		GENERIC (
- 			STOCK_WIDTH : natural := STOCK_W
- 		);
-		port(
+		 	STOCK_WIDTH : natural := STOCK_W
+		 );
+		PORT(
 			clk: in std_logic;
 			Strike : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			A : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			B : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			C : in std_logic_vector(STOCK_WIDTH-1 downto 0);
 			constants_ready : in std_logic;
-			seed_alterator : in std_logic_vector(5 downto 0);
 
 			data_out : out std_logic_vector(STOCK_WIDTH-1 downto 0);
 			pricer_ready : out std_logic;
@@ -172,9 +177,7 @@ package monte_carlo is
 	COMPONENT random_gaussian is 
 		PORT (
 			clk : in std_logic;
-			reset : in std_logic;
-			seed_alterator : in std_logic_vector(5 downto 0);
-
+			reset_in	: in std_logic;		
 			random : out std_logic_vector(11 downto 0);
 			ready : out std_logic
 		);
